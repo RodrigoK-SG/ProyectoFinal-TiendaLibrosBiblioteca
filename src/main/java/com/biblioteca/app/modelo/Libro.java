@@ -31,21 +31,37 @@ import lombok.ToString;
 public class Libro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, unique = true, length = 20) private String isbn;
-    @Column(nullable = false, length = 255) private String titulo;
-    @Column(unique = true) private String slug;
-    @Column(name = "IMAGEN_PORTADA") private String imagenPortada;
+    
+    @Column(nullable = false, unique = true, length = 20) 
+    private String isbn;
+    
+    @Column(nullable = false, length = 255) 
+    private String titulo;
+    
+    @Column(unique = true) 
+    private String slug;
+    
+    @Column(name = "IMAGEN_PORTADA") 
+    private String imagenPortada;
+    
     private String sinopsis;
-    @Column(nullable = false) private Integer paginas;
+    
+    @Column(nullable = false) 
+    private Integer paginas;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false) private FormatoLibro formato;
+    @Column(nullable = false) 
+    private FormatoLibro formato;
     
-    @Column(name = "PRECIO_VENTA_ACTUAL", nullable = false) private BigDecimal precioVentaActual;
-    @Column(name = "PRECIO_ALQUILER_ACTUAL") private BigDecimal precioAlquilerActual;
+    @Column(name = "PRECIO_VENTA_ACTUAL", nullable = false) 
+    private BigDecimal precioVentaActual;
+    
+    @Column(name = "PRECIO_ALQUILER_ACTUAL") 
+    private BigDecimal precioAlquilerActual;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EDITORIAL_ID", nullable = false) private Editorial editorial;
+    @JoinColumn(name = "EDITORIAL_ID", nullable = false) 
+    private Editorial editorial;
     
     private Boolean activo = true;
 
