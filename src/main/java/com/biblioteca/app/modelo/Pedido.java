@@ -1,6 +1,8 @@
 package com.biblioteca.app.modelo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.biblioteca.app.modelo.enums.CanalVenta;
 import com.biblioteca.app.modelo.enums.EstadoPedido;
@@ -42,4 +44,7 @@ public class Pedido {
     
     @Column(nullable = false) 
     private BigDecimal total;
+    
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles = new ArrayList<>();
 }

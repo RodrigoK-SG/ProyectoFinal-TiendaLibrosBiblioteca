@@ -21,5 +21,8 @@ public class HistorialEstadoPedido {
     @Enumerated(EnumType.STRING) @Column(nullable = false) 
     private EstadoPedido estado;
     
+    @Column(length = 255)
+    private String comentario;
+    
     private String notas;
 }
