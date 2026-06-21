@@ -22,6 +22,12 @@ public class UsuarioServicio {
     public List<Usuario> listarTodos() {
         return usuarioRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(Integer id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
+    }
 
     @Transactional
     public Usuario guardar(Usuario usuario) {
@@ -44,6 +50,14 @@ public class UsuarioServicio {
         
         // Toggle (si está activo, lo desactiva, y viceversa)
         usuario.setActivo(!usuario.getActivo());
+        usuarioRepository.save(usuario);
+    }
+    
+    @Transactional
+    public void eliminar(Integer id) {
+        // Borrado Lógico
+        Usuario usuario = buscarPorId(id);
+        usuario.setActivo(false);
         usuarioRepository.save(usuario);
     }
 }

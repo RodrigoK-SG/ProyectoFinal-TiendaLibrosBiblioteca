@@ -28,4 +28,9 @@ public class InstitucionServicio {
     
     // No hacemos método de eliminar aquí, porque si quieres eliminar una institución, 
     // lo correcto es "desactivar" al Cliente padre.
+    @Transactional
+    public void eliminar(Integer id) {
+        // Borrado Físico
+        institucionRepository.deleteById(id);
+    }
 }

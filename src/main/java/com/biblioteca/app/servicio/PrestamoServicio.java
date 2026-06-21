@@ -44,4 +44,10 @@ public class PrestamoServicio {
         penalizacion.setId(null);
         return penalizacionRepository.save(penalizacion);
     }
+    
+    @Transactional(readOnly = true)
+    public Prestamo buscarPrestamoPorId(Integer id) {
+        return prestamoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Préstamo no encontrado."));
+    }
 }

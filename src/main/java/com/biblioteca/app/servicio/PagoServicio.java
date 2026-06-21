@@ -20,30 +20,25 @@ public class PagoServicio {
     private final ComprobanteFiscalRepositorio comprobanteRepository;
 
     @Transactional(readOnly = true)
-    public List<Pago> listarPagos() { return pagoRepository.findAll(); }
+    public List<Pago> listarPagos() { 
+    	return pagoRepository.findAll(); 
+    }
 
     @Transactional(readOnly = true)
-    public List<ComprobanteFiscal> listarComprobantes() { return comprobanteRepository.findAll(); }
-
+    public List<ComprobanteFiscal> listarComprobantes() { 
+    	return comprobanteRepository.findAll(); 
+    }
+    
     @Transactional
-    public Pago procesarPago(Pago pago, boolean requiereFactura) {
-        pago.setId(null);
-        Pago pagoRegistrado = pagoRepository.save(pago);
-
-        if (requiereFactura) {
-            ComprobanteFiscal comprobante = new ComprobanteFiscal();
-            comprobante.setPago(pagoRegistrado);
-            
-            // Usamos TUS métodos originales: setSerie() y setNumero()
-            comprobante.setSerie("F001");
-            comprobante.setNumero(System.currentTimeMillis() + ""); 
-            
-            // Faltaría llenar los otros campos obligatorios (monto total, impuesto, etc.)
-            // que podrías extraer del objeto "pago"
-            
-            comprobanteRepository.save(comprobante);
+    public Pago registrarPago(Pago pago) {
+        return pagoRepository.save(pago);
+    }
+    
+    @Transactional
+    public ComprobanteFiscal emitirComprobante(ComprobanteFiscal comprobante) {
+        if (comprobanteRepository.existsBySerieAndNumero(comprobante.getSerie(), comprobante.getNumero())) {
+            throw new RuntimeException("Error Fiscal: El comprobante " + comprobante.getSerie() + "-" + comprobante.getNumero() + " ya fue emitido.");
         }
-
-        return pagoRegistrado;
+        return comprobanteRepository.save(comprobante);
     }
 }

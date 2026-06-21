@@ -7,6 +7,9 @@ import com.biblioteca.app.repositorio.ResenaLibroRepositorio;
 import com.biblioteca.app.repositorio.EnvioRepositorio;
 import com.biblioteca.app.repositorio.ReservaBibliotecaRepositorio;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +45,22 @@ public class OperacionesFondoServicio {
         envio.setId(null);
         return envioRepository.save(envio);
     }
+    
+    @Transactional(readOnly = true)
+    public Envio buscarEnvioPorPedido(Integer pedidoId) {
+        return envioRepository.findByPedidoId(pedidoId)
+                .orElseThrow(() -> new RuntimeException("No se encontró información de envío para este pedido."));
+    }
 
     // ================= RESERVAS =================
     @Transactional
     public ReservaBiblioteca registrarReservaFisica(ReservaBiblioteca reserva) {
         reserva.setId(null);
         return reservaRepository.save(reserva);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ReservaBiblioteca> misReservas(Integer clienteId) {
+        return reservaRepository.findByClienteId(clienteId);
     }
 }

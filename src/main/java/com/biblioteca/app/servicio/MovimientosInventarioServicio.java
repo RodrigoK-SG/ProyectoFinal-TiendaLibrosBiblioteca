@@ -17,8 +17,8 @@ public class MovimientosInventarioServicio {
     private final MovimientosInventarioRepositorio movimientosRepository;
 
     @Transactional(readOnly = true)
-    public List<MovimientosInventario> consultarKardex() {
-        return movimientosRepository.findAll();
+    public List<MovimientosInventario> consultarKardex(Integer libroId, Integer sucursalId) {
+        return movimientosRepository.findByLibroIdAndSucursalIdOrderByIdDesc(libroId, sucursalId);
     }
 
     @Transactional

@@ -20,6 +20,12 @@ public class ClienteServicio {
     public List<Cliente> listarTodos() {
         return clienteRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+    public Cliente buscarPorId(Integer id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado."));
+    }
 
     @Transactional
     public Cliente guardar(Cliente cliente) {
@@ -38,4 +44,6 @@ public class ClienteServicio {
         cliente.setActivo(false);
         clienteRepository.save(cliente);
     }
+    
+    
 }

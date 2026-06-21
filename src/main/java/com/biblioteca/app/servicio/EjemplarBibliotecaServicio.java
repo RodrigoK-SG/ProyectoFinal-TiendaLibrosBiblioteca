@@ -55,4 +55,10 @@ public class EjemplarBibliotecaServicio {
         ejemplar.setEstadoFisico(EstadoFisico.PARA_DESCARTE);
         ejemplarRepository.save(ejemplar);
     }
+    
+    @Transactional(readOnly = true)
+    public EjemplarBiblioteca buscarPorId(Integer id) {
+        return ejemplarRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ejemplar no encontrado."));
+    }
 }

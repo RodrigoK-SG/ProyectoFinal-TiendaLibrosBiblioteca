@@ -30,14 +30,27 @@ public class ContratoServicio {
     }
 
     @Transactional
-    public Cotizacion emitirCotizacion(Cotizacion cotizacion) {
-        cotizacion.setId(null);
-        return cotizacionRepository.save(cotizacion);
+    public Contrato registrarContrato(Contrato contrato) {
+        if (contratoRepository.existsByCodigoContrato(contrato.getCodigoContrato())) {
+            throw new RuntimeException("El código de contrato '" + contrato.getCodigoContrato() + "' ya está registrado.");
+        }
+        return contratoRepository.save(contrato);
+    }
+
+    @Transactional(readOnly = true)
+    public Contrato buscarContratoPorId(Integer id) {
+        return contratoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contrato no encontrado."));
     }
 
     @Transactional
-    public Contrato firmarContrato(Contrato contrato) {
-        contrato.setId(null);
-        return contratoRepository.save(contrato);
+    public Cotizacion registrarCotizacion(Cotizacion cotizacion) {
+        return cotizacionRepository.save(cotizacion);
+    }
+    
+    @Transactional(readOnly = true)
+    public Cotizacion buscarCotizacionPorId(Integer id) {
+        return cotizacionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cotización no encontrada."));
     }
 }
