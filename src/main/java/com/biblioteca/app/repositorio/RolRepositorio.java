@@ -6,5 +6,5 @@ import com.biblioteca.app.modelo.Rol;
 
 
 public interface RolRepositorio extends JpaRepository<Rol, Integer>{
-	
+	boolean existsByNombre(String nombre);
 }
