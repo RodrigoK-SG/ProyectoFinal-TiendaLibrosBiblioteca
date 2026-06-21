@@ -1,7 +1,6 @@
 package com.biblioteca.app.servicio;
 
 import com.biblioteca.app.modelo.InventarioVenta;
-import com.biblioteca.app.modelo.InventarioVentaId;
 import com.biblioteca.app.repositorio.InventarioVentaRepositorio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
