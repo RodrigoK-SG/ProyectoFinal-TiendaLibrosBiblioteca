@@ -1,0 +1,197 @@
+/* Paleta de colores basada en el wireframe */
+:root {
+    --bg-cream: #f4eee1;
+    --brand-coral: #c86b66;
+    --brand-dark: #2c3e50;
+}
+
+body {
+    background-color: #fbfbfc;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.bg-cream {
+    background-color: var(--bg-cream) !important;
+}
+
+.brand-title {
+    color: #8c3f3b;
+}
+
+.btn-search {
+    background-color: var(--brand-coral);
+    color: white;
+}
+.btn-search:hover {
+    background-color: #b35652;
+    color: white;
+}
+
+.book-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1) !important;
+}
+
+.book-img {
+    height: 200px;
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.text-coral {
+    color: var(--brand-coral) !important;
+}
+
+.btn-add-cart {
+    background-color: var(--brand-coral);
+    color: white;
+    border: none;
+}
+.btn-add-cart:hover {
+    background-color: #b35652;
+    color: white;
+}
+.text-hover-coral:hover {
+    color: #c86b66 !important;
+    transition: color 0.2s ease-in-out;
+}
+
+/* Estilos para las pantallas de Accesos (Login / Registro) */
+.bg-libreria-accesos {
+    background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+}
+
+.card-acceso {
+    max-width: 440px; 
+    width: 100%; 
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+
+.nav-tabs-accesos .nav-link {
+    color: #6c757d;
+    border: none;
+    background: transparent;
+}
+
+.nav-tabs-accesos .nav-link.active {
+    color: #c86b66 !important;
+    border-bottom: 2px solid #c86b66 !important;
+    font-weight: bold;
+}
+
+.btn-acceso-submit {
+    background-color: #c86b66;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-acceso-submit:hover {
+    background-color: #8c3f3b;
+}
+
+.txt-terminos-legal {
+    font-size: 0.72rem; 
+    color: #888888;
+}
+
+/* Pantalla de Detalle del Libro */
+.bg-alejandria-page {
+    background-color: #fcfaf2;
+}
+
+.img-portada-detalle {
+    max-height: 480px; 
+    object-fit: cover;
+}
+
+.font-editorial-titulo {
+    color: #333333; 
+    font-family: 'Georgia', serif;
+}
+
+.box-precio-venta {
+    background-color: #f4eee1;
+    color: #333333;
+}
+
+.box-precio-alquiler {
+    background-color: #f4eee1;
+    color: #c86b66;
+}
+
+.box-precio-alquiler .title-alquiler {
+    color: #c86b66 !important;
+}
+
+.btn-add-cart-detalle {
+    background-color: #c86b66; 
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-add-cart-detalle:hover {
+    background-color: #8c3f3b;
+}
+
+.avatar-resena {
+    background-color: #f4eee1;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Pantalla de Checkout / Finalizar Compra */
+.bg-coral-ale {
+    background-color: #c86b66;
+    color: #ffffff;
+}
+
+.container-option-select {
+    cursor: pointer;
+    background-color: #ffffff;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.container-option-select:hover {
+    background-color: #faf9f5;
+}
+
+.img-mini-checkout {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.btn-check:checked + .btn-outline-secondary {
+    background-color: #c86b66;
+    border-color: #c86b66;
+    color: #ffffff;
+}
+.btn-checkout-proceder {
+    background-color: #c86b66 !important; 
+    color: #ffffff !important;            
+    border-radius: 12px;                  
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-checkout-proceder:hover {
+    background-color: #8c3f3b !important; 
+    transform: translateY(-1px);          
+}
+
+/* Estilo para el enlace de retroceso */
+.btn-volver-catalogo {
+    color: #6c757d !important; /* Gris oscuro visible */
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s ease-in-out;
+}
+
+.btn-volver-catalogo:hover {
+    color: #c86b66 !important; /* Cambia a tu color coral cuando pasas el mouse */
+}
