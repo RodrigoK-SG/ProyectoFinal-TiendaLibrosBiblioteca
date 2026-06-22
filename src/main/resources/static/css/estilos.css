@@ -195,3 +195,55 @@ body {
 .btn-volver-catalogo:hover {
     color: #c86b66 !important; /* Cambia a tu color coral cuando pasas el mouse */
 }
+
+
+
+
+
+
+
+/* ==========================================================================
+   MÓDULO: MI PERFIL (LIBRERÍA DE ALEJANDRIA)
+   ========================================================================== */
+.sidebar-menu .list-group-item.active {
+    background-color: #c86b66 !important;
+    border-color: #c86b66 !important;
+}
+
+.sidebar-menu .list-group-item {
+    color: #495057;
+    font-weight: 500;
+}
+
+.profile-header-card {
+    background-color: #f8f9fa;
+    border-left: 5px solid #c86b66;
+}
+
+.nav-tab-content {
+    display: none;
+}
+
+.nav-tab-content.active {
+    display: block;
+}
+
+/* ==========================================================================
+   LÍNEA DE TIEMPO (DETALLE DE PEDIDO)
+   ========================================================================== */
+.timeline-container {
+    border-left: 2px solid #e9ecef;
+    margin-left: 10px;
+}
+.timeline-item:last-child {
+    padding-bottom: 0 !important;
+}
+.timeline-item:last-child::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    bottom: 0;
+    width: 6px;
+    height: 100%;
+    background-color: white; /* Oculta la línea sobrante del último item */
+}

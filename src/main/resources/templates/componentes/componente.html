@@ -5,40 +5,37 @@
 </head>
 <body>
 
-    <!-- =========================================================
-         1. NAVBAR SUPERIOR REUTILIZABLE
-         ========================================================= -->
-		 <nav th:fragment="navbar" class="navbar navbar-expand-lg py-3 shadow-sm" style="background-color: #f4eee1;">
-		         <div class="container p-2 rounded">
-		             <a class="navbar-brand fw-bold text-decoration-none" href="/catalogo" style="color: #8c3f3b;">Librería de Alejandría</a>
-		             
-		             <div class="d-flex mx-auto w-50">
-		                 <div class="input-group">
-		                     <input type="text" class="form-control" placeholder="Buscar por título, autor o ISBN...">
-		                     <button class="btn text-white" style="background-color: #c86b66;" type="button"><i class="bi bi-search"></i></button>
-		                 </div>
-		             </div>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg py-3 shadow-sm" style="background-color: #f4eee1;">
+        <div class="container p-2 rounded">
+            <a class="navbar-brand fw-bold text-decoration-none" href="/catalogo" style="color: #8c3f3b;">Librería de Alejandría</a>
+            
+            <div class="d-flex mx-auto w-50">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar por título, autor o ISBN...">
+                    <button class="btn text-white" style="background-color: #c86b66;" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
 
-		             <div class="d-flex align-items-center gap-3">
-		                 <a href="/login" class="text-dark text-decoration-none"><i class="bi bi-person me-1"></i> Mi perfil</a>
-		                 
-		                 <a href="/catalogo/checkout" id="cart-link" class="position-relative text-dark text-decoration-none">
-		                     <i class="bi bi-cart3 fs-4"></i>
-		                     <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-		                 </a>
-		             </div>
-		         </div>
-		     </nav>
+            <div class="d-flex align-items-center gap-3">
+                <a href="/catalogo/perfil" class="text-dark text-decoration-none">
+                    <i class="bi bi-person me-1"></i> Mi perfil
+                </a>
+                
+                <a href="/catalogo/checkout" id="cart-link" class="position-relative text-dark text-decoration-none">
+                    <i class="bi bi-cart3 fs-4"></i>
+                    <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
 
-    <!-- =========================================================
-         2. FOOTER COMPLETO REUTILIZABLE
-         ========================================================= -->
     <footer th:fragment="footer" class="mt-5 border-top" style="background-color: #f4eee1; color: #333333;">
         <div class="container pt-5 pb-4">
             <div class="row text-center text-md-start">
                 
-                <!-- Columna 1: Redes -->
                 <div class="col-md-3 mb-4">
                     <h5 class="fw-bold mb-2" style="color: #8c3f3b;">Librería de Alejandría</h5>
                     <p class="small text-muted mb-3">Libros para todos</p>
@@ -51,7 +48,6 @@
                     </div>
                 </div>
 
-                <!-- Columna 2: Enlaces -->
                 <div class="col-md-2 mb-4">
                     <h6 class="fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Sobre Nosotros</h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
@@ -62,19 +58,17 @@
                     </ul>
                 </div>
 
-                <!-- Columna 3: Cuenta -->
                 <div class="col-md-2 mb-4">
                     <h6 class="fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Mi Cuenta</h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
-                        <li><a href="/login" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Ingresar</a></li>
-                        <li><a href="/cuenta/pedidos" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Pedidos</a></li>
-                        <li><a href="/cuenta/prestamos" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Préstamos</a></li>
-                        <li><a href="/cuenta/multas" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Multas</a></li>
-                        <li><a href="/cuenta/ajustes" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Ajustes de Cuenta</a></li>
+                        <li><a href="/catalogo/perfil" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Ingresar</a></li>
+                        <li><a href="/catalogo/perfil" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Pedidos</a></li>
+                        <li><a href="/catalogo/perfil" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Préstamos</a></li>
+                        <li><a href="/catalogo/perfil" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Mis Multas</a></li>
+                        <li><a href="/catalogo/perfil" class="text-dark text-decoration-none text-opacity-75 text-hover-coral">Ajustes de Cuenta</a></li>
                     </ul>
                 </div>
 
-                <!-- Columna 4: Atención -->
                 <div class="col-md-2 mb-4">
                     <h6 class="fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Atención al Cliente</h6>
                     <ul class="list-unstyled d-flex flex-column gap-2 small">
@@ -86,7 +80,6 @@
                     </ul>
                 </div>
 
-                <!-- Columna 5: Formulario -->
                 <div class="col-md-3 mb-4">
                     <h6 class="fw-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Suscríbete</h6>
                     <p class="small text-muted mb-3">Recibe nuestras últimas ofertas y boletines</p>
@@ -116,7 +109,6 @@
             </div>
         </div>
 
-        <!-- Zona Oscura Inferior -->
         <div class="py-4 text-white" style="background-color: #3e4a59;">
             <div class="container">
                 <div class="row text-center text-md-start g-3">

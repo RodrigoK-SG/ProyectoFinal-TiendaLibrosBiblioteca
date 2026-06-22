@@ -1,55 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
-    
-    // Intercepción AJAX para los botones de Añadir al Carrito
-    const addCartButtons = document.querySelectorAll(".btn-add-cart");
-    const cartCountBadge = document.getElementById("cart-count");
 
-    addCartButtons.forEach(button => {
-        button.addEventListener("click", function (e) {
-            e.preventDefault();
-            const libroId = this.getAttribute("data-id");
-
-            // Simulación o petición asíncrona fetch al controlador backend
-            fetch(`/carrito/agregar?libroId=${libroId}`, { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        let currentCount = parseInt(cartCountBadge.textContent) || 0;
-                        cartCountBadge.textContent = currentCount + 1;
-                        alert("¡Libro añadido al carrito exitosamente!");
-                    }
-                }).catch(err => console.error("Error al gestionar el carrito:", err));
-        });
-    });
-
-    // Filtros dinámicos al marcar los checkboxes
-    const checkboxes = document.querySelectorAll(".filter-checkbox");
-    checkboxes.forEach(cb => {
-        cb.addEventListener("change", function () {
-            // Envía automáticamente el formulario de filtros sin recargar manualmente
-            document.getElementById("filter-form").submit();
-        });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Lógica para mostrar / ocultar contraseña en el Login
+    // ==========================================================================
+    // 1. MÓDULO: LOGIN (Mostrar / Ocultar Contraseña)
+    // ==========================================================================
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
 
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener("click", function () {
-            // Cambiar el tipo de input
             const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
             passwordInput.setAttribute("type", type);
             
-            // Cambiar el icono del ojo
             this.querySelector("i").classList.toggle("bi-eye");
             this.querySelector("i").classList.toggle("bi-eye-slash");
         });
     }
-});
 
-document.addEventListener("DOMContentLoaded", function () {
+    // ==========================================================================
+    // 2. MÓDULO: CHECKOUT (Lógica de Delivery vs Recojo)
+    // ==========================================================================
     const radioRecojo = document.getElementById("entregaRecojo");
     const radioDelivery = document.getElementById("entregaDelivery");
     const sectionDireccion = document.getElementById("sectionDireccionEnvio");
@@ -61,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (radioDelivery.checked) {
                 sectionDireccion.classList.remove("d-none");
                 if (txtCostoEnvio) txtCostoEnvio.innerText = "S/ 5.99";
-                if (txtTotalPedido) txtTotalPedido.innerText = "S/ 106.29"; // Simulación de suma de delivery
+                if (txtTotalPedido) txtTotalPedido.innerText = "S/ 106.29"; // Suma simulada
             } else {
                 sectionDireccion.classList.add("d-none");
                 if (txtCostoEnvio) txtCostoEnvio.innerText = "S/ 0.00";
@@ -72,43 +41,88 @@ document.addEventListener("DOMContentLoaded", function () {
         radioRecojo.addEventListener("change", handleDeliveryToggle);
         radioDelivery.addEventListener("change", handleDeliveryToggle);
     }
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    // 1. Capturamos los elementos del Navbar
+    // ==========================================================================
+    // 3. MÓDULO: CARRITO (Simulación Front-end con LocalStorage)
+    // ==========================================================================
     const cartBadge = document.getElementById("cart-badge");
     const cartLink = document.getElementById("cart-link");
-
-    // 2. Recuperamos la cantidad guardada en la sesión del navegador o empezamos en 0
     let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
     
-    // Actualizamos el número visualmente al cargar cualquier página
+    // Actualizar visualmente al cargar
     if (cartBadge) {
         cartBadge.innerText = cartCount;
     }
 
-    // 3. Escuchar clics en los botones de "Comprar Ahora" o "Añadir al Carrito"
-    // Busca cualquier elemento con la clase que usamos en el catálogo y detalle
-    document.querySelectorAll(".btn-add-cart-detalle").forEach(button => {
+    // Sumar al carrito en Catálogo y Detalle
+    document.querySelectorAll(".btn-add-cart-detalle, .btn-add-cart").forEach(button => {
         button.addEventListener("click", function (e) {
-            // Incrementamos el contador
+            e.preventDefault(); // Evita que la página salte
             cartCount++;
             localStorage.setItem("cartCount", cartCount);
             
             if (cartBadge) {
                 cartBadge.innerText = cartCount;
+                // Pequeña animación visual para feedback
+                cartBadge.classList.add("scale-up");
+                setTimeout(() => cartBadge.classList.remove("scale-up"), 200);
             }
+            alert("¡Libro añadido al carrito exitosamente!");
         });
     });
 
-    // 4. CONTROL DE REDIRECCIÓN: Validar clic en el icono del carrito
+    // Validar clic en el icono del carrito
     if (cartLink) {
         cartLink.addEventListener("click", function (e) {
-            // Si el carrito está en 0, cancelamos el viaje a la pantalla de pago
             if (cartCount === 0) {
                 e.preventDefault(); 
                 alert("Tu carrito está vacío. ¡Añade un libro para continuar!");
             }
         });
     }
+
+    // ==========================================================================
+    // 4. MÓDULO: MI PERFIL (Tabs y Modal de Renovación)
+    // ==========================================================================
+    const tabs = document.querySelectorAll("#profileTabs .list-group-item");
+    const contents = document.querySelectorAll(".nav-tab-content");
+
+    if (tabs.length > 0 && contents.length > 0) {
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function() {
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(c => c.classList.remove("active"));
+
+                this.classList.add("active");
+                const targetTab = this.getAttribute("data-tab");
+                document.getElementById(targetTab).classList.add("active");
+            });
+        });
+    }
+
+    const botonesRenovar = document.querySelectorAll(".btn-renovar");
+    const inputModalId = document.getElementById("modalPrestamoId");
+
+    if (botonesRenovar.length > 0 && inputModalId) {
+        botonesRenovar.forEach(boton => {
+            boton.addEventListener("click", function() {
+                inputModalId.value = this.getAttribute("data-id");
+            });
+        });
+    }
+
+    // ==========================================================================
+    // 5. MÓDULO: CATÁLOGO (Envío automático de filtros)
+    // ==========================================================================
+    const checkboxes = document.querySelectorAll(".filter-checkbox");
+    const filterForm = document.getElementById("filter-form");
+    
+    if (checkboxes.length > 0 && filterForm) {
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", function () {
+                filterForm.submit();
+            });
+        });
+    }
+
 });
