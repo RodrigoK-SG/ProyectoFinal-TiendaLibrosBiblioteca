@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.biblioteca.app.modelo.Pedido;
 import com.biblioteca.app.servicio.CategoriaServicio;
 import com.biblioteca.app.servicio.LibroServicio;
+import com.biblioteca.app.servicio.PedidoServicio;
+
+
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +23,7 @@ public class CatalogoWebController {
 
     private final LibroServicio libroServicio;
     private final CategoriaServicio categoriaServicio;
+    private final PedidoServicio pedidoServicio;
 
     @GetMapping
     public String verCatalogoPublico(Model model) {
@@ -40,7 +46,7 @@ public class CatalogoWebController {
     @GetMapping("/detalle/{id}")
     public String verDetalleLibro(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("libro", libroServicio.buscarPorId(id));
-        return "detalle";
+        return "detalle-libro";
     }
     
     @GetMapping("/checkout") 
@@ -244,6 +250,41 @@ public class CatalogoWebController {
 
         // Carga la plantilla HTML que acabamos de crear
         return "detalle-pedido"; 
+    }
+    
+    @GetMapping("/pedidos/comprobante/{id}")
+    public String descargarComprobante(@PathVariable("id") String id, Model model) {
+        
+        // 1. Creamos un pedido simulado para que la plantilla no explote
+        java.util.Map<String, Object> pedidoSimulado = new java.util.HashMap<>();
+        pedidoSimulado.put("id", id);
+        pedidoSimulado.put("fechaPedido", java.time.LocalDateTime.now());
+        pedidoSimulado.put("total", 300.90);
+        
+        // 2. Simulamos el cliente dentro del pedido
+        java.util.Map<String, Object> cliente = new java.util.HashMap<>();
+        cliente.put("nombreRazonSocial", "André Letona");
+        cliente.put("numeroDocumento", "74839201");
+        pedidoSimulado.put("cliente", cliente);
+        
+        // 3. Simulamos un libro en la lista de detalles
+        java.util.List<java.util.Map<String, Object>> detalles = new java.util.ArrayList<>();
+        java.util.Map<String, Object> d1 = new java.util.HashMap<>();
+        d1.put("cantidad", 1);
+        d1.put("precioUnitario", 85.00);
+        d1.put("subtotal", 85.00);
+        
+        java.util.Map<String, Object> l1 = new java.util.HashMap<>();
+        l1.put("titulo", "El Arte de la Ficción");
+        d1.put("libro", l1);
+        detalles.add(d1);
+        
+        pedidoSimulado.put("detalles", detalles);
+        
+        // Enviamos el pedido simulado a la vista
+        model.addAttribute("pedido", pedidoSimulado);
+        
+        return "comprobante-impresion"; 
     }
     
 }

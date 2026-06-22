@@ -44,8 +44,8 @@
                 <div class="row row-cols-1 row-cols-md-4 g-3">
                     <div class="col" th:each="libro : ${libros}">
                         <div class="card h-100 text-center border-0 shadow-sm p-2 bg-white">
-                            <img th:src="${libro.imagenPortada != null ? libro.imagenPortada : 'https://via.placeholder.com/150x200'}" 
-                                 class="card-img-top rounded mx-auto" style="height: 200px; object-fit: cover;" th:alt="${libro.titulo}">
+							<img th:src="${libro.imagenPortada != null ? libro.imagenPortada : 'https://via.placeholder.com/150x200'}" 
+							     class="card-img-top rounded mx-auto img-portada-catalogo" th:alt="${libro.titulo}">
                             
                             <div class="card-body p-2 d-flex flex-column justify-content-between">
                                 <div>

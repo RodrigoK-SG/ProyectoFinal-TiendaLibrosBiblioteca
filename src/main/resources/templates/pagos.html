@@ -52,34 +52,38 @@
                         </div>
                     </div>
 
-                    <div class="card border-0 shadow-sm p-4 mb-4 bg-white">
-                        <h5 class="fw-bold mb-3 text-dark"><span class="badge bg-coral-ale me-2">2</span>Tipo de Entrega</h5>
-                        
-                        <div class="form-check p-3 border rounded mb-2 container-option-select">
-                            <input class="form-check-input ms-1" type="radio" name="tipoEntrega" id="entregaRecojo" value="RECOJO_TIENDA" checked>
-                            <label class="form-check-label ms-3 fw-bold text-dark d-block" for="entregaRecojo">
-                                <i class="bi bi-shop me-2 text-secondary"></i>Recojo en Tienda
-                                <span class="d-block small text-muted fw-normal mt-1">Gratis • Disponible hoy mismo</span>
-                            </label>
-                        </div>
+					<div class="card border-0 shadow-sm p-4 mb-4 bg-white" style="border-radius: 12px;">
+					    <h5 class="fw-bold mb-3">
+					        <span class="badge bg-danger me-2" style="background-color: #8c3f3b !important;">2</span> Tipo de Entrega
+					    </h5>
 
-                        <div class="form-check p-3 border rounded container-option-select">
-                            <input class="form-check-input ms-1" type="radio" name="tipoEntrega" id="entregaDelivery" value="DELIVERY">
-                            <label class="form-check-label ms-3 fw-bold text-dark d-block" for="entregaDelivery">
-                                <i class="bi bi-truck me-2 text-secondary"></i>Delivery a Domicilio
-                                <span class="d-block small text-muted fw-normal mt-1">S/ 5.99 • Entrega en 24-48 hrs</span>
-                            </label>
-                            
-                            <div id="sectionDireccionEnvio" class="row g-2 mt-3 d-none">
-                                <div class="col-md-8">
-                                    <input type="text" name="direccionCompleta" class="form-control form-control-sm bg-light" placeholder="Dirección de Envío">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" name="codigoPostal" class="form-control form-control-sm bg-light" placeholder="Código Postal">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+					    <div class="form-check p-3 border rounded mb-3 container-option-select position-relative d-flex align-items-start">
+					        <input class="form-check-input ms-1 mt-1" type="radio" name="tipoEntrega" id="entregaRecojo" value="RECOJO_TIENDA" checked style="cursor: pointer;">
+					        <label class="form-check-label ms-3 fw-bold text-dark d-block w-100" for="entregaRecojo" style="cursor: pointer;">
+					            <i class="bi bi-shop me-2 text-secondary"></i>Recojo en Tienda
+					            <span class="d-block small text-muted fw-normal mt-1">Gratis • Disponible hoy mismo</span>
+					        </label>
+					    </div>
+
+					    <div class="form-check p-3 border rounded container-option-select position-relative d-flex align-items-start flex-column">
+					        <div class="w-100 d-flex align-items-start">
+					            <input class="form-check-input ms-1 mt-1" type="radio" name="tipoEntrega" id="entregaDelivery" value="DELIVERY" style="cursor: pointer;">
+					            <label class="form-check-label ms-3 fw-bold text-dark d-block w-100" for="entregaDelivery" style="cursor: pointer;">
+					                <i class="bi bi-truck me-2 text-secondary"></i>Delivery a Domicilio
+					                <span class="d-block small text-muted fw-normal mt-1">S/ 5.99 • Entrega en 24-48 hrs</span>
+					            </label>
+					        </div>
+					        
+					        <div id="sectionDireccionEnvio" class="row g-2 mt-3 w-100 d-none ps-3">
+					            <div class="col-md-8">
+					                <input type="text" name="direccionCompleta" class="form-control form-control-sm bg-light" placeholder="Dirección de Envío">
+					            </div>
+					            <div class="col-md-4">
+					                <input type="text" name="codigoPostal" class="form-control form-control-sm bg-light" placeholder="Código Postal">
+					            </div>
+					        </div>
+					    </div>
+					</div>
 
                     <div class="card border-0 shadow-sm p-4 bg-white">
                         <h5 class="fw-bold mb-3 text-dark"><span class="badge bg-coral-ale me-2">3</span>Método de Pago</h5>

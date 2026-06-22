@@ -126,3 +126,82 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+// Control de redirección de pestañas desde el footer al perfil
+document.addEventListener("DOMContentLoaded", function () {
+    const rutas = {
+        '#pedidos-tab': 'tab-pedidos',
+        '#prestamos-tab': 'tab-prestamos',
+        '#multas-tab': 'tab-multas',
+        '#ajustes-tab': 'tab-ajustes'
+    };
+
+    const hash = window.location.hash;
+    
+    if (hash && rutas[hash]) {
+        const targetDataTab = rutas[hash];
+        const botonObjetivo = document.querySelector(`button[data-tab="${targetDataTab}"]`);
+
+        if (botonObjetivo) {
+            // 1. Simula un clic real en el botón del menú lateral
+            // Esto es genial porque activa automáticamente toda la lógica de cambio de panel que ya tenías programada
+            botonObjetivo.click();
+        }
+    }
+});
+
+// Manejo interactivo de votación por estrellas en reseñas
+document.addEventListener("DOMContentLoaded", function () {
+    const estrellas = document.querySelectorAll(".estrella-voto");
+    const inputCalificacion = document.getElementById("calificacionInput");
+
+    if (estrellas.length > 0 && inputCalificacion) {
+        estrellas.forEach((estrella) => {
+            
+            estrella.addEventListener("mouseover", function () {
+                const valor = parseInt(this.getAttribute("data-value"));
+                estrellas.forEach(e => e.classList.remove("hovered"));
+                for (let i = 0; i < valor; i++) {
+                    estrellas[i].classList.add("hovered");
+                }
+            });
+
+            estrella.addEventListener("mouseout", function () {
+                estrellas.forEach(e => e.classList.remove("hovered"));
+            });
+
+            estrella.addEventListener("click", function () {
+                const valor = parseInt(this.getAttribute("data-value"));
+                inputCalificacion.value = valor;
+                
+                estrellas.forEach(e => e.classList.remove("selected"));
+                for (let i = 0; i < valor; i++) {
+                    estrellas[i].classList.add("selected");
+                }
+            });
+        });
+    }
+});
+
+// Control dinámico de Tipo de Entrega en el Checkout
+document.addEventListener("DOMContentLoaded", function () {
+    const radioRecojo = document.getElementById("entregaRecojo");
+    const radioDelivery = document.getElementById("entregaDelivery");
+    const sectionDireccion = document.getElementById("sectionDireccionEnvio");
+
+    if (radioRecojo && radioDelivery && sectionDireccion) {
+        // Escucha cambios en la opción de Recojo
+        radioRecojo.addEventListener("change", function () {
+            if (this.checked) {
+                sectionDireccion.classList.add("d-none"); // Oculta dirección
+            }
+        });
+
+        // Escucha cambios en la opción de Delivery
+        radioDelivery.addEventListener("change", function () {
+            if (this.checked) {
+                sectionDireccion.classList.remove("d-none"); // Muestra dirección
+            }
+        });
+    }
+});

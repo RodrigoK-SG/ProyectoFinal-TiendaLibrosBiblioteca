@@ -247,3 +247,60 @@ body {
     height: 100%;
     background-color: white; /* Oculta la línea sobrante del último item */
 }
+
+/* Estilos para el modal de votación por estrellas */
+.estrella-voto {
+    color: #decbba;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.estrella-voto.hovered,
+.estrella-voto.selected {
+    color: #ffc107 !important;
+}
+
+.estrella-voto:active {
+    transform: scale(1.2);
+}
+
+/* Estandarización de portadas en el catálogo */
+.img-portada-catalogo {
+    height: 210px;
+    object-fit: contain; /* Evita que la portada se estire o se corte bruscamente */
+    background-color: #f8fafc; /* Le da un fondo limpio si la imagen es angosta */
+    padding: 4px;
+}
+
+/* Estilos para la Vista de Sucursales */
+.card-sucursal {
+    border-radius: 16px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-sucursal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+.img-sucursal {
+    height: 220px;
+    object-fit: cover;
+}
+
+.text-info {
+    color: #4da1a9 !important; /* Tono celeste/cyan suave que tienes en tus iconos */
+}
+
+.btn-maps-sucursal {
+    background-color: #e3fafc;
+    color: #0b7285;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-maps-sucursal:hover {
+    background-color: #c5f6fa;
+    color: #0c8599;
+}

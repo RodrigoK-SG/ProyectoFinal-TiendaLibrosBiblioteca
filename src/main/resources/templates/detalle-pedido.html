@@ -70,27 +70,32 @@
                     </div>
                 </div>
 
-                <div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 12px;">
-                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>Comprobante Fiscal</h6>
-                    <div th:if="${pedido.comprobante != null}">
-                        <div class="d-flex justify-content-between mb-2 small">
-                            <span class="text-muted">Tipo</span>
-                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.tipoComprobante}">Boleta de Venta</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2 small">
-                            <span class="text-muted">Serie</span>
-                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.serie}">B001</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3 small">
-                            <span class="text-muted">Número</span>
-                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.numero}">00012543</span>
-                        </div>
-                        <button class="btn btn-light btn-sm w-100 fw-bold text-secondary border">Descargar Comprobante (PDF)</button>
-                    </div>
-                    <div th:if="${pedido.comprobante == null}">
-                        <p class="text-muted small m-0">El comprobante se generará una vez confirmado el pago.</p>
-                    </div>
-                </div>
+				<div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 12px;">
+				                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>Comprobante Fiscal</h6>
+				                    <div th:if="${pedido.comprobante != null}">
+				                        <div class="d-flex justify-content-between mb-2 small">
+				                            <span class="text-muted">Tipo</span>
+				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.tipoComprobante}">Boleta de Venta</span>
+				                        </div>
+				                        <div class="d-flex justify-content-between mb-2 small">
+				                            <span class="text-muted">Serie</span>
+				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.serie}">B001</span>
+				                        </div>
+				                        <div class="d-flex justify-content-between mb-3 small">
+				                            <span class="text-muted">Número</span>
+				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.numero}">00012543</span>
+				                        </div>
+				                        
+				                        <a th:href="@{/catalogo/pedidos/comprobante/{id}(id=${pedido.id})}" 
+				                           class="btn btn-sm w-100 fw-bold text-secondary border d-flex align-items-center justify-content-center" 
+				                           style="border-radius: 8px; background-color: #f8f9fa;">
+				                           <i class="bi bi-download me-2"></i> Descargar Comprobante (PDF)
+				                        </a>
+				                    </div>
+				                    <div th:if="${pedido.comprobante == null}">
+				                        <p class="text-muted small m-0">El comprobante se generará una vez confirmado el pago.</p>
+				                    </div>
+				                </div>
 
             </div>
 
@@ -141,10 +146,14 @@
 
                     <div class="row g-2">
                         <div class="col-6">
-                            <button class="btn btn-outline-secondary btn-sm w-100 py-2 fw-bold" style="border-radius: 8px;">Solicitar Devolución</button>
+							<button class="btn btn-outline-secondary btn-sm w-100 py-2 fw-bold" style="border-radius: 8px;" onclick="alert('Solicitud de devolución enviada al administrador del sistema.')">
+							    Solicitar Devolución
+							</button>
                         </div>
                         <div class="col-6">
-                            <button class="btn text-white btn-sm w-100 py-2 fw-bold" style="background-color: #c86b66; border-radius: 8px;">Volver a Pedir</button>
+							<a href="/catalogo" class="btn text-white btn-sm w-100 py-2 fw-bold" style="background-color: #c86b66; border-radius: 8px;">
+							    Volver a Pedir
+							</a>
                         </div>
                     </div>
 
