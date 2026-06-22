@@ -60,36 +60,56 @@
 			        </div>
 			    </div>
 
-			    <div class="col-md-2 mb-4 ps-md-4">
-			        <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Sobre Nosotros</h6>
-			        <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
-			            <li><a href="#" class="text-decoration-none text-muted">Nuestra Historia</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Nuestras Sucursales</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Contáctanos</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Blog</a></li>
-			        </ul>
-			    </div>
+				<!-- Columna 1: Sobre Nosotros -->
+				<div class="col-md-2 mb-4 ps-md-4">
+				    <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Sobre Nosotros</h6>
+				    <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
+				        <li><a href="/catalogo/nuestra-historia" class="text-decoration-none text-muted">Nuestra Historia</a></li>
+				        <li><a href="/catalogo/sucursales" class="text-decoration-none text-muted">Nuestras Sucursales</a></li>
+				        
+				        <!-- MODIFICADO: Apunta a la ruta real de contacto -->
+				        <li><a href="/catalogo/contacto" class="text-decoration-none text-muted">Contáctanos</a></li>
+				        
+				        <!-- MODIFICADO: Apunta a la ruta real del blog -->
+				        <li><a href="/catalogo/blog" class="text-decoration-none text-muted">Blog</a></li>
+				    </ul>
+				</div>
 
-			    <div class="col-md-2 mb-4">
-			        <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Mi Cuenta</h6>
-			        <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
-			            <li><a href="/catalogo/perfil#pedidos-tab" class="text-decoration-none text-muted">Mis Pedidos</a></li>
-			            <li><a href="/catalogo/perfil#prestamos-tab" class="text-decoration-none text-muted">Mis Préstamos</a></li>
-			            <li><a href="/catalogo/perfil#multas-tab" class="text-decoration-none text-muted">Mis Multas</a></li>
-			            <li><a href="/catalogo/perfil#ajustes-tab" class="text-decoration-none text-muted">Ajustes de Cuenta</a></li>
-			        </ul>
-			    </div>
+				<!-- Columna 2: Mi Cuenta -->
+				<div class="col-md-2 mb-4">
+				    <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Mi Cuenta</h6>
+				    <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
+				        <li><a href="/catalogo/perfil#pedidos-tab" class="text-decoration-none text-muted">Mis Pedidos</a></li>
+				        <li><a href="/catalogo/perfil#prestamos-tab" class="text-decoration-none text-muted">Mis Préstamos</a></li>
+				        <li><a href="/catalogo/perfil#multas-tab" class="text-decoration-none text-muted">Mis Multas</a></li>
+				        <li><a href="/catalogo/perfil#ajustes-tab" class="text-decoration-none text-muted">Ajustes de Cuenta</a></li>
+				    </ul>
+				</div>
 
-			    <div class="col-md-3 mb-4">
-			        <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Atención al Cliente</h6>
-			        <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
-			            <li><a href="#" class="text-decoration-none text-muted">Políticas de Envío</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Reglamento General</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Políticas de Devolución</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted">Términos y Condiciones</a></li>
-			            <li><a href="#" class="text-decoration-none text-muted"><i class="bi bi-journal-text me-1"></i>Libro de Reclamaciones</a></li>
-			        </ul>
-			    </div>
+				<!-- Columna 3: Atención al Cliente -->
+				<div class="col-md-3 mb-4">
+				    <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Atención al Cliente</h6>
+				    <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
+				        <!-- MODIFICADO: Enlace a Políticas de Envío -->
+				        <li><a href="/catalogo/politicas-envio" class="text-decoration-none text-muted">Políticas de Envío</a></li>
+				        
+				        <!-- Enlace a Reglamento General -->
+				        <li><a href="/catalogo/reglamento" class="text-decoration-none text-muted">Reglamento General</a></li>
+				        
+				        <!-- MODIFICADO: Enlace a Políticas de Devolución -->
+				        <li><a href="/catalogo/politicas-devolucion" class="text-decoration-none text-muted">Políticas de Devolución</a></li>
+				        
+				        <!-- MODIFICADO: Enlace a Términos y Condiciones -->
+				        <li><a href="/catalogo/terminos-condiciones" class="text-decoration-none text-muted">Términos y Condiciones</a></li>
+				        
+				        <!-- Enlace a Libro de Reclamaciones -->
+				        <li>
+				            <a href="/catalogo/libro-reclamaciones" class="text-decoration-none text-muted">
+				                <i class="bi bi-journal-text me-1"></i>Libro de Reclamaciones
+				            </a>
+				        </li>
+				    </ul>
+				</div>
 
 			    <div class="col-md-3 mb-4">
 			        <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Suscríbete</h6>

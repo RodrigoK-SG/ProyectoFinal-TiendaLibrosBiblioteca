@@ -287,4 +287,47 @@ public class CatalogoWebController {
         return "comprobante-impresion"; 
     }
     
+    @GetMapping("/sucursales")
+    public String verSucursales() {
+        return "sucursales"; // Debe coincidir exactamente con el nombre de tu archivo HTML
+    }
+    
+    @GetMapping("/reglamento")
+    public String verReglamentoGeneral() {
+        return "reglamento"; // Carga tu archivo reglamento.html de templates
+    }
+    
+    @GetMapping("/libro-reclamaciones")
+    public String verLibroReclamaciones() {
+        return "reclamaciones"; // Retorna tu archivo reclamaciones.html de la carpeta templates
+    }
+    @GetMapping("/terminos-condiciones")
+    public String verTerminos() {
+        return "terminos";
+    }
+
+    @GetMapping("/politicas-envio")
+    public String verPoliticasEnvio() {
+        return "envio";
+    }
+
+    @GetMapping("/politicas-devolucion")
+    public String verPoliticasDevolucion() {
+        return "devolucion";
+    }
+
+    @GetMapping("/nuestra-historia")
+    public String verNuestraHistoria() {
+        return "historia";
+    }
+    @GetMapping("/contacto")
+    public String verContacto() {
+        return "contacto"; // Levanta contacto.html
+    }
+
+    @GetMapping("/blog")
+    public String verBlog() {
+        return "blog"; // Levanta blog.html
+    }
+    
 }
