@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBS Almacén - Stock General</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --sbs-maroon: #b64c4c; --sbs-beige: #eaddcf; --sbs-bg: #f5f7f9; }
+        body { background-color: var(--sbs-bg); }
+        .navbar-sbs { background-color: var(--sbs-beige); }
+        .navbar-brand { color: var(--sbs-maroon) !important; font-weight: bold; }
+        .table-custom { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; }
+        .table-custom thead th { background-color: #f8f9fa; color: #6c757d; font-size: 0.85rem; padding: 1rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-sbs py-0">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand py-3" href="#">Biblioteca Alejandria</a>
+            <ul class="nav nav-tabs mx-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/almacen/movimientos}">Movimientos</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/almacen/stock}">Stock General</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/almacen/alertas}">Alertas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 py-4">
+        <h2 class="fw-semibold mb-4">Stock General</h2>
+        
+        <div class="table-responsive table-custom">
+            <table class="table table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th>LIBRO</th>
+                        <th>ISBN</th>
+                        <th>PRECIO (S/)</th>
+                        <th>ESTADO CATÁLOGO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="libro : ${libros}">
+                        <td>
+                            <div class="fw-semibold" th:text="${libro.titulo}">Título del Libro</div>
+                            <small class="text-muted" th:text="${libro.slug}">/slug</small>
+                        </td>
+                        <td class="text-muted" th:text="${libro.isbn}">ISBN</td>
+                        
+                        <td class="fw-bold text-success" th:text="${libro.precioVentaActual}">0.00</td>
+                        
+                        <td>
+                            <span th:if="${libro.activo}" class="badge bg-success-subtle text-success rounded-pill px-3">Activo</span>
+                            <span th:unless="${libro.activo}" class="badge bg-danger-subtle text-danger rounded-pill px-3">Inactivo (Oculto)</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

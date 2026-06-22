@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBS Almacén - Movimientos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --sbs-maroon: #b64c4c; --sbs-beige: #eaddcf; --sbs-bg: #f5f7f9; }
+        body { background-color: var(--sbs-bg); font-family: 'Segoe UI', sans-serif; }
+        .navbar-sbs { background-color: var(--sbs-beige); border-bottom: 2px solid #d5c5b5; }
+        .navbar-brand { color: var(--sbs-maroon) !important; font-weight: bold; font-size: 1.5rem; }
+        .nav-tabs { border-bottom: none; }
+        .nav-tabs .nav-link { color: #6c757d; border: none; font-weight: 500; padding: 1rem 1.5rem; }
+        .nav-tabs .nav-link.active { background-color: transparent; color: #000; border-bottom: 3px solid #000; }
+        .table-custom { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; }
+        .table-custom thead th { background-color: #f8f9fa; color: #6c757d; font-size: 0.85rem; text-transform: uppercase; padding: 1rem; }
+        .btn-maroon { background-color: var(--sbs-maroon); color: white; border: none; }
+        .btn-maroon:hover { background-color: #9a3f3f; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-sbs py-0">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand py-3" href="#">Biblioteca Alejandria</a>
+            <ul class="nav nav-tabs mx-auto">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/almacen/movimientos}">Movimientos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/almacen/stock}">Stock General</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/almacen/alertas}">Alertas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-semibold">Movimientos de Inventario</h2>
+            <button class="btn btn-maroon rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalMovimiento">
+                <i class="bi bi-plus-lg"></i> Registrar Movimiento
+            </button>
+        </div>
+
+        <div class="table-responsive table-custom">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>FECHA/HORA</th>
+                        <th>LIBRO</th>
+                        <th>TIPO</th>
+                        <th>CANTIDAD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="4" class="text-center text-muted">Historial de movimientos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalMovimiento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold">Registrar Movimiento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-4">
+                    
+                    <form th:action="@{/almacen/movimientos/registrar}" th:object="${nuevoMovimiento}" method="post">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">LIBRO *</label>
+                                    <select class="form-select" id="selectLibro" th:field="*{libro.id}" required>
+                                        <option value="" data-isbn="">Seleccione un libro...</option>
+                                        <option th:each="l : ${libros}" 
+                                                th:value="${l.id}" 
+                                                th:data-isbn="${l.isbn}" 
+                                                th:text="${l.titulo}"></option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-muted">CANTIDAD *</label>
+                                    <input type="number" class="form-control" th:field="*{cantidad}" min="1" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light rounded border">
+                                <img id="portadaPreview" src="https://via.placeholder.com/150x220?text=Portada" 
+                                     alt="Vista previa" class="img-fluid rounded shadow-sm my-3" style="max-height: 220px;">
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3 mt-3">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4">Confirmar Movimiento</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.getElementById('selectLibro').addEventListener('change', function() {
+            // Obtenemos la opción que el usuario acaba de seleccionar
+            var opcionSeleccionada = this.options[this.selectedIndex];
+            
+            // Leemos el atributo data-isbn que llenó Thymeleaf
+            var isbn = opcionSeleccionada.getAttribute('data-isbn');
+            
+            // Ubicamos la etiqueta img
+            var imagen = document.getElementById('portadaPreview');
+            
+            if (isbn && isbn.trim() !== '') {
+                // Si hay ISBN, construimos la URL de la API y se la pasamos a la imagen
+                imagen.src = 'https://covers.openlibrary.org/b/isbn/' + isbn + '-M.jpg';
+            } else {
+                // Si no hay ISBN, ponemos la imagen por defecto
+                imagen.src = 'https://via.placeholder.com/150x220?text=Sin+ISBN';
+            }
+        });
+    </script>
+</body>
+</html>
