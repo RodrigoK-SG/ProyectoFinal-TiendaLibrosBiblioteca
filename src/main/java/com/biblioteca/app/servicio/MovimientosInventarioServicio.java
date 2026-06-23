@@ -15,6 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class MovimientosInventarioServicio {
 
     private final MovimientosInventarioRepositorio movimientosRepository;
+    
+    @Transactional(readOnly = true)
+    public List<MovimientosInventario> listarTodosLosMovimientos() {
+        return movimientosRepository.findAll();
+    }
 
     @Transactional(readOnly = true)
     public List<MovimientosInventario> consultarKardex(Integer libroId, Integer sucursalId) {

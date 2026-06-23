@@ -45,59 +45,116 @@
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
-                        <th>FECHA/HORA</th>
+                        <th>ID / REF</th>
                         <th>LIBRO</th>
                         <th>TIPO</th>
                         <th>CANTIDAD</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td colspan="4" class="text-center text-muted">Historial de movimientos...</td></tr>
+                    <tr th:if="${#lists.isEmpty(listaMovimientos)}">
+                        <td colspan="4" class="text-center text-muted py-4">No hay movimientos registrados aún.</td>
+                    </tr>
+                    
+                    <tr th:each="mov : ${listaMovimientos}">
+                        <td>
+                            <span class="fw-bold" th:text="${'#' + mov.id}">#1</span><br>
+                            <small class="text-muted" th:text="${mov.referenciaId}">Ref</small>
+                        </td>
+                        
+                        <td>
+                            <span th:text="${mov.libro != null ? mov.libro.titulo : 'Libro Desconocido'}">Título</span><br>
+                            <small class="text-muted" th:text="${mov.libro != null ? 'ISBN: ' + mov.libro.isbn : ''}">ISBN</small>
+                        </td>
+                        
+                        <td>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success" 
+                                  th:if="${mov.tipoMovimiento == 'INGRESO_PROVEEDOR'}">
+                                Entrada
+                            </span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger" 
+                                  th:if="${mov.tipoMovimiento == 'VENTA_FISICA' or mov.tipoMovimiento == 'MERMA'}">
+                                Salida
+                            </span>
+                            <small class="d-block text-muted mt-1" th:text="${mov.tipoMovimiento}">TIPO</small>
+                        </td>
+                        
+                        <td class="fw-bold fs-5" th:text="${mov.cantidad}">1</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <div class="modal fade" id="modalMovimiento" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold">Registrar Movimiento</h5>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-1">Registrar Entrada o Salida de Stock</h5>
+                        <p class="text-muted small mb-0">Complete los campos para registrar el movimiento</p>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body pt-4">
-                    
+                
+                <div class="modal-body px-4 pt-4 pb-4">
                     <form th:action="@{/almacen/movimientos/registrar}" th:object="${nuevoMovimiento}" method="post">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="mb-3">
-                                    <label class="form-label small fw-bold text-muted">LIBRO *</label>
-                                    <select class="form-select" id="selectLibro" th:field="*{libro.id}" required>
-                                        <option value="" data-isbn="">Seleccione un libro...</option>
-                                        <option th:each="l : ${libros}" 
-                                                th:value="${l.id}" 
-                                                th:data-isbn="${l.isbn}" 
-                                                th:text="${l.titulo}"></option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small fw-bold text-muted">CANTIDAD *</label>
-                                    <input type="number" class="form-control" th:field="*{cantidad}" min="1" required>
-                                </div>
-                            </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">TIPO DE MOVIMIENTO <span class="text-danger">*</span></label>
+                            <select class="form-select text-secondary" id="selectTipoMovimiento" th:field="*{tipoMovimiento}" required>
+                                <option value="" selected>Seleccione el tipo...</option>
+                                <option value="INGRESO_PROVEEDOR">Ingreso por Proveedor (Entrada)</option>
+                                <option value="VENTA_FISICA">Venta en Tienda (Salida)</option>
+                                <option value="MERMA">Merma / Dañado (Salida)</option>
+                            </select>
+                        </div>
 
-                            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light rounded border">
-                                <img id="portadaPreview" src="https://via.placeholder.com/150x220?text=Portada" 
-                                     alt="Vista previa" class="img-fluid rounded shadow-sm my-3" style="max-height: 220px;">
+                        <div class="mb-3" id="zonaLibroExistente">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">LIBRO EN STOCK <span class="text-danger">*</span></label>
+                            <select class="form-select text-secondary" id="selectLibro" th:field="*{libro.id}">
+                                <option value="" data-isbn="">Buscar título o ISBN...</option>
+                                <option th:each="l : ${libros}" 
+                                        th:value="${l.id}" 
+                                        th:data-isbn="${l.isbn}" 
+                                        th:text="${l.titulo + ' (' + l.isbn + ')'}"></option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="zonaLibroNuevo" style="display: none;">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">NUEVO LIBRO (ISBN) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control text-secondary" id="inputNuevoIsbn" name="nuevoIsbn" placeholder="Ingrese el ISBN del nuevo libro...">
+                            <div class="form-text text-primary" style="font-size: 0.7rem;">El sistema registrará este ISBN automáticamente.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">CANTIDAD <span class="text-danger">*</span></label>
+                            <div class="input-group" style="width: 150px;">
+                                <button class="btn btn-outline-secondary" type="button" id="btnRestar" style="background-color: #f8f9fa;">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="number" class="form-control text-center font-monospace fw-bold" th:field="*{cantidad}" id="inputCantidad" value="1" min="1" required>
+                                <button class="btn btn-outline-secondary" type="button" id="btnSumar" style="background-color: #f8f9fa;">
+                                    <i class="bi bi-plus"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2 border-top pt-3 mt-3">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-maroon px-4">Confirmar Movimiento</button>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">REFERENCIA</label>
+                            <input type="text" class="form-control text-secondary" th:field="*{referenciaId}" placeholder="N.º de guía, ticket o motivo...">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">OBSERVACIONES</label>
+                            <textarea class="form-control text-secondary" th:field="*{descripcion}" rows="3" placeholder="Descripción detallada del movimiento..."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="button" class="btn btn-outline-secondary px-4 py-2" data-bs-dismiss="modal" style="border-radius: 8px;">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4 py-2" style="border-radius: 8px;">Confirmar Movimiento</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -106,23 +163,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        document.getElementById('selectLibro').addEventListener('change', function() {
-            // Obtenemos la opción que el usuario acaba de seleccionar
-            var opcionSeleccionada = this.options[this.selectedIndex];
-            
-            // Leemos el atributo data-isbn que llenó Thymeleaf
-            var isbn = opcionSeleccionada.getAttribute('data-isbn');
-            
-            // Ubicamos la etiqueta img
-            var imagen = document.getElementById('portadaPreview');
-            
-            if (isbn && isbn.trim() !== '') {
-                // Si hay ISBN, construimos la URL de la API y se la pasamos a la imagen
-                imagen.src = 'https://covers.openlibrary.org/b/isbn/' + isbn + '-M.jpg';
-            } else {
-                // Si no hay ISBN, ponemos la imagen por defecto
-                imagen.src = 'https://via.placeholder.com/150x220?text=Sin+ISBN';
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            // LÓGICA DE CANTIDAD
+            const btnRestar = document.getElementById('btnRestar');
+            const btnSumar = document.getElementById('btnSumar');
+            const inputCantidad = document.getElementById('inputCantidad');
+
+            btnSumar.addEventListener('click', () => {
+                let actual = parseInt(inputCantidad.value) || 0;
+                inputCantidad.value = actual + 1;
+            });
+
+            btnRestar.addEventListener('click', () => {
+                let actual = parseInt(inputCantidad.value) || 0;
+                if(actual > 1) {
+                    inputCantidad.value = actual - 1;
+                }
+            });
+
+            // LÓGICA DE MOSTRAR/OCULTAR ZONAS
+            const selectTipoMovimiento = document.getElementById('selectTipoMovimiento');
+            const zonaLibroExistente = document.getElementById('zonaLibroExistente');
+            const zonaLibroNuevo = document.getElementById('zonaLibroNuevo');
+            const selectLibro = document.getElementById('selectLibro');
+            const inputNuevoIsbn = document.getElementById('inputNuevoIsbn');
+
+            selectTipoMovimiento.addEventListener('change', function() {
+                const tipo = this.value;
+
+                if (tipo === 'INGRESO_PROVEEDOR') {
+                    zonaLibroExistente.style.display = 'none';
+                    selectLibro.removeAttribute('required');
+                    selectLibro.value = ''; 
+                    
+                    zonaLibroNuevo.style.display = 'block';
+                    inputNuevoIsbn.setAttribute('required', 'required');
+                } else {
+                    zonaLibroExistente.style.display = 'block';
+                    selectLibro.setAttribute('required', 'required');
+                    
+                    zonaLibroNuevo.style.display = 'none';
+                    inputNuevoIsbn.removeAttribute('required');
+                    inputNuevoIsbn.value = ''; 
+                }
+            });
         });
     </script>
 </body>
