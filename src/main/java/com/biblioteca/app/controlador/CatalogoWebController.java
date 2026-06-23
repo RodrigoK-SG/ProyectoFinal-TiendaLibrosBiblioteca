@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.biblioteca.app.modelo.Pedido;
 import com.biblioteca.app.servicio.CategoriaServicio;
 import com.biblioteca.app.servicio.LibroServicio;
-
-
-
+import com.biblioteca.app.servicio.PedidoServicio;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,41 +20,42 @@ public class CatalogoWebController {
 
     private final LibroServicio libroServicio;
     private final CategoriaServicio categoriaServicio;
+    private final PedidoServicio pedidoServicio;
 
     @GetMapping
     public String verCatalogoPublico(Model model) {
         model.addAttribute("categorias", categoriaServicio.listarTodas());
         model.addAttribute("libros", libroServicio.listarLibrosParaTienda());
         
-        return "index"; 
+        return "cliente/index"; 
     }
     
     @GetMapping("/vista-login")
     public String verLogin() {
-        return "login"; 
+        return "cliente/login"; 
     }
 
     @GetMapping("/registro")
     public String verRegistro() {
-        return "registro"; 
+        return "cliente/registro"; 
     }
     
     @GetMapping("/detalle/{id}")
     public String verDetalleLibro(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("libro", libroServicio.buscarPorId(id));
-        return "detalle-libro";
+        return "cliente/detalle-libro";
     }
     
     @GetMapping("/checkout") 
     public String verFinalizarCompra(Model model) {
-        return "pagos"; 
+        return "cliente/pagos"; 
     }
     
     @GetMapping("/perfil")
     public String verPerfilUsuario(Model model) {
         
         
-    	// 1. Simulamos la cabecera usando tu modelo REAL de Cliente
+        // 1. Simulamos la cabecera usando tu modelo REAL de Cliente
         com.biblioteca.app.modelo.Cliente cliente = new com.biblioteca.app.modelo.Cliente();
         cliente.setId(1); // O 1L si tu ID es tipo Long
         cliente.setNombreRazonSocial("André Letona"); 
@@ -120,7 +120,7 @@ public class CatalogoWebController {
         multas.add(m1);
         model.addAttribute("listaMultas", multas);
 
-        return "perfil";
+        return "cliente/perfil";
         
         
        
@@ -246,7 +246,7 @@ public class CatalogoWebController {
         model.addAttribute("pedido", pedido);
 
         // Carga la plantilla HTML que acabamos de crear
-        return "detalle-pedido"; 
+        return "cliente/detalle-pedido"; 
     }
     
     @GetMapping("/pedidos/comprobante/{id}")
@@ -281,50 +281,50 @@ public class CatalogoWebController {
         // Enviamos el pedido simulado a la vista
         model.addAttribute("pedido", pedidoSimulado);
         
-        return "comprobante-impresion"; 
+        return "cliente/comprobante-impresion"; 
     }
     
     @GetMapping("/sucursales")
     public String verSucursales() {
-        return "sucursales"; // Debe coincidir exactamente con el nombre de tu archivo HTML
+        return "cliente/sucursales"; 
     }
     
     @GetMapping("/reglamento")
     public String verReglamentoGeneral() {
-        return "reglamento"; // Carga tu archivo reglamento.html de templates
+        return "cliente/reglamento"; 
     }
     
     @GetMapping("/libro-reclamaciones")
     public String verLibroReclamaciones() {
-        return "reclamaciones"; // Retorna tu archivo reclamaciones.html de la carpeta templates
+        return "cliente/reclamaciones"; 
     }
     @GetMapping("/terminos-condiciones")
     public String verTerminos() {
-        return "terminos";
+        return "cliente/terminos";
     }
 
     @GetMapping("/politicas-envio")
     public String verPoliticasEnvio() {
-        return "envio";
+        return "cliente/envio";
     }
 
     @GetMapping("/politicas-devolucion")
     public String verPoliticasDevolucion() {
-        return "devolucion";
+        return "cliente/devolucion";
     }
 
     @GetMapping("/nuestra-historia")
     public String verNuestraHistoria() {
-        return "historia";
+        return "cliente/historia";
     }
     @GetMapping("/contacto")
     public String verContacto() {
-        return "contacto"; // Levanta contacto.html
+        return "cliente/contacto"; 
     }
 
     @GetMapping("/blog")
     public String verBlog() {
-        return "blog"; // Levanta blog.html
+        return "cliente/blog"; 
     }
     
 }
