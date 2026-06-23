@@ -1,0 +1,32 @@
+/* Color de fondo beige suave para mantener la identidad de la librería */
+.bg-alejandria-page {
+    background-color: #fdfbf7 !important;
+}
+
+/* Efecto hover interactivo para las tarjetas de los libros */
+.libro-card {
+    transition: all 0.2s ease-in-out;
+}
+.libro-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Mostrar el botón flotante "+" solo cuando el mouse pasa sobre la tarjeta */
+.libro-card:hover .btn-add {
+    display: flex !important;
+}
+
+/* Ajuste estético para separar los métodos de pago con el color de Yape */
+.border-purple {
+    border-color: #8b3dff !important;
+}
+.border-purple:hover {
+    background-color: #8b3dff !important;
+    color: white !important;
+}
+
+/* Sombra ligera para las imágenes de las portadas */
+.drop-shadow {
+    filter: drop-shadow(0px 6px 8px rgba(0, 0, 0, 0.15));
+}

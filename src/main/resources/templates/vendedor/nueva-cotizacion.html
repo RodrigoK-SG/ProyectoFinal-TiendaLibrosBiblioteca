@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nueva Cotización</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/estilos-vendedor.css">
+</head>
+<body class="bg-alejandria-page" style="background-color: #fdfbf7;">
+
+    <div th:replace="~{componentes/componente-vendedor :: navbar-vendedor}"></div>
+
+    <main class="container py-5" style="max-width: 900px;">
+        
+        <div class="mb-4">
+            <a href="/vendedor/cotizaciones" class="text-decoration-none text-muted small"><i class="bi bi-arrow-left me-2"></i>Volver al listado</a>
+            <h2 class="fw-bold text-dark mt-2" style="font-family: 'Georgia', serif;">Crear Nueva Cotización</h2>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+            <h6 class="fw-bold small text-muted text-uppercase mb-4">Datos del Cliente</h6>
+            
+            <div class="mb-4">
+                <label class="form-label small text-muted">Seleccionar Institución</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                    <select class="form-select border-start-0 shadow-none">
+                        <option selected>Universidad Nacional</option>
+                        <option value="1">Colegio San Marcos</option>
+                        <option value="2">Ministerio de Educación</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label small text-muted">Fecha de Emisión</label>
+                    <input type="text" class="form-control bg-light" value="28/05/2026" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small text-muted">Fecha de Validez</label>
+                    <input type="date" class="form-control" value="2026-06-28">
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+            <h6 class="fw-bold small text-muted text-uppercase mb-4">Detalle de Libros</h6>
+            
+            <div class="input-group mb-4">
+                <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0 shadow-none" placeholder="Buscar libro por título o ISBN para agregar...">
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle">
+                    <thead class="border-bottom small text-muted text-uppercase">
+                        <tr>
+                            <th class="fw-semibold">Libro</th>
+                            <th class="fw-semibold text-center">Precio Unit.</th>
+                            <th class="fw-semibold text-center">Cantidad</th>
+                            <th class="fw-semibold text-end">Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-bottom">
+                            <td class="py-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="/img/libros/dune.jpg" class="rounded me-3 object-fit-cover" width="40" height="55" alt="Libro">
+                                    <div>
+                                        <h6 class="fw-bold mb-0 text-dark small">Dune</h6>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Frank Herbert</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center py-3 text-muted small">S/ 120.00</td>
+                            <td class="py-3">
+                                <div class="btn-group btn-group-sm d-flex justify-content-center" role="group">
+                                    <button type="button" class="btn btn-outline-secondary px-2">-</button>
+                                    <span class="btn border-secondary bg-white px-3 fw-bold disabled text-dark">10</span>
+                                    <button type="button" class="btn btn-outline-secondary px-2">+</button>
+                                </div>
+                            </td>
+                            <td class="text-end py-3 fw-bold text-dark small">S/ 1,200.00</td>
+                            <td class="text-end py-3"><button class="btn btn-link text-muted p-0"><i class="bi bi-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex flex-column align-items-end mt-4 pt-3">
+                <span class="text-muted small">Total Estimado</span>
+                <h2 class="fw-bold text-dark">S/ 1,200.00</h2>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mb-5">
+            <button type="button" class="btn btn-white border px-4 py-2 rounded-pill fw-bold text-muted shadow-sm">Guardar como Borrador</button>
+            <button type="button" class="btn btn-danger px-5 py-2 rounded-pill fw-bold shadow-sm" style="background-color: #c86b66; border: none;">Emitir Cotización</button>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vendedor.js"></script>
+</body>
+</html>

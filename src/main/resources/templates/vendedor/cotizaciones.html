@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizaciones Corporativas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/estilos-vendedor.css">
+</head>
+<body class="bg-alejandria-page" style="background-color: #fdfbf7;">
+
+    <div th:replace="~{componentes/componente-vendedor :: navbar-vendedor}"></div>
+
+    <main class="container py-5" style="max-width: 1200px;">
+        
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <h2 class="fw-bold text-dark m-0" style="font-family: 'Georgia', serif;">Gestión de Cotizaciones</h2>
+            <a href="/vendedor/cotizaciones/crear" class="btn btn-danger rounded-pill px-4 py-2 fw-bold shadow-sm" style="background-color: #c86b66; border: none;">
+                <i class="bi bi-plus-lg me-2"></i>Nueva Cotización
+            </a>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center bg-white h-100">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;"><i class="bi bi-file-earmark-text text-secondary fs-4"></i></div>
+                    <div>
+                        <p class="text-muted small mb-0 fw-semibold">En Borrador</p>
+                        <h3 class="fw-bold mb-0 text-dark">3</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center bg-white h-100">
+                    <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;"><i class="bi bi-envelope text-primary fs-4"></i></div>
+                    <div>
+                        <p class="text-muted small mb-0 fw-semibold">Enviadas a Clientes</p>
+                        <h3 class="fw-bold mb-0 text-dark">12</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center bg-white h-100 border-bottom border-4 border-success">
+                    <div class="rounded-circle bg-success-subtle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;"><i class="bi bi-check-circle text-success fs-4"></i></div>
+                    <div>
+                        <p class="text-muted small mb-0 fw-semibold">Aprobadas (Mes)</p>
+                        <h3 class="fw-bold mb-0 text-dark">S/ 15,400.00</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted small text-uppercase">
+                        <tr>
+                            <th class="py-3 ps-4 fw-semibold border-0">N° Cotización</th>
+                            <th class="py-3 fw-semibold border-0">Institución</th>
+                            <th class="py-3 fw-semibold border-0">Emisión</th>
+                            <th class="py-3 fw-semibold border-0">Validez</th>
+                            <th class="py-3 fw-semibold border-0">Total Estimado</th>
+                            <th class="py-3 fw-semibold border-0">Estado</th>
+                            <th class="py-3 pe-4 text-end fw-semibold border-0">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        <tr>
+                            <td class="ps-4 py-3 fw-bold text-dark small">COT-001</td>
+                            <td class="py-3 small">Universidad Nacional</td>
+                            <td class="py-3 text-muted small">28/05/2026</td>
+                            <td class="py-3 text-muted small">28/06/2026</td>
+                            <td class="py-3 fw-bold text-dark small">S/ 2,500.00</td>
+                            <td class="py-3">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-bold">APROBADA</span>
+                            </td>
+                            <td class="pe-4 text-end py-3">
+                                <button class="btn btn-sm btn-light text-muted rounded-circle me-1" data-bs-toggle="modal" data-bs-target="#modalDetalleCotizacion"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-light text-muted rounded-circle"><i class="bi bi-download"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 py-3 fw-bold text-dark small">COT-004</td>
+                            <td class="py-3 small">Ministerio de Educación</td>
+                            <td class="py-3 text-muted small">28/05/2026</td>
+                            <td class="py-3 text-muted small">28/06/2026</td>
+                            <td class="py-3 fw-bold text-dark small">S/ 15,400.00</td>
+                            <td class="py-3">
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3 py-1 fw-bold">BORRADOR</span>
+                            </td>
+                            <td class="pe-4 text-end py-3">
+                                <a href="/vendedor/cotizaciones/crear" class="btn btn-sm btn-light text-muted rounded-circle me-1"><i class="bi bi-pencil"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal fade" id="modalDetalleCotizacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-0 bg-light p-4 pb-0">
+                    <h5 class="fw-bold mb-0" style="font-family: 'Georgia', serif;">Cotización COT-001</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <p class="small text-muted mb-1">Institución: <span class="text-dark fw-semibold">Universidad Nacional</span></p>
+                            <p class="small text-muted mb-0">RUC: <span class="text-dark fw-semibold">20123456789</span></p>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <p class="small text-muted mb-1">Contacto: <span class="text-dark fw-semibold">Dr. Luis Reyes</span></p>
+                            <p class="small text-muted mb-0">Email: <span class="text-dark fw-semibold">compras@universidad.edu.pe</span></p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-4 bg-light px-3 rounded-3">
+                        <div>
+                            <p class="small text-muted mb-1">Emisión: <span class="text-dark fw-semibold">28/05/2026</span></p>
+                            <p class="small text-muted mb-0">Validez: <span class="text-dark fw-semibold">28/06/2026</span></p>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-4 py-2 fs-6">ESTADO: APROBADA</span>
+                    </div>
+
+                    <h6 class="fw-bold small text-muted text-uppercase mb-3">Artículos Cotizados</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-borderless table-sm small">
+                            <thead class="border-bottom">
+                                <tr class="text-muted">
+                                    <th>LIBRO</th>
+                                    <th class="text-center">CANTIDAD</th>
+                                    <th class="text-end">PRECIO UNIT.</th>
+                                    <th class="text-end">SUBTOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2">Dune (Tapa Dura)</td>
+                                    <td class="text-center py-2">20 und</td>
+                                    <td class="text-end py-2">S/ 120.00</td>
+                                    <td class="text-end py-2 fw-bold text-dark">S/ 2,400.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-end border-top pt-3">
+                        <p class="small text-muted mb-1">Descuento Convenio (15%)</p>
+                        <h4 class="fw-bold text-dark mb-0 d-flex align-items-center justify-content-end gap-3">
+                            <span class="fs-6 text-muted fw-normal">TOTAL ESTIMADO:</span> S/ 2,500.00
+                        </h4>
+                    </div>
+
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0 justify-content-end bg-white">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" style="background-color: #c86b66; border: none;">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Descargar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/vendedor.js"></script>
+</body>
+</html>
