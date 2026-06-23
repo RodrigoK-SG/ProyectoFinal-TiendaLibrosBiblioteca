@@ -10,14 +10,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) 
             
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/error").permitAll() 
-                .requestMatchers("/", "/catalogo", "/catalogo/**", "/vendedor/**").permitAll()
+                // ¡AQUÍ ESTÁ EL CAMBIO! Agregamos "/almacen/**" a la lista
+                .requestMatchers("/", "/catalogo", "/catalogo/**", "/vendedor/**", "/almacen/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll()
                 .anyRequest().authenticated()
             )

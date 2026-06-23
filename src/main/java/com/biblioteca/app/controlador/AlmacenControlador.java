@@ -33,7 +33,6 @@ public class AlmacenControlador {
     private final SucursalServicio sucursalServicio; 
 
     // --- VISTA DE MOVIMIENTOS ---
- // --- VISTA DE MOVIMIENTOS ---
     @GetMapping("/movimientos")
     public String verMovimientos(Model model) {
         // Para el select del modal
@@ -45,11 +44,11 @@ public class AlmacenControlador {
         // ¡AQUÍ ESTÁ LA MAGIA PARA LLENAR LA TABLA!
         model.addAttribute("listaMovimientos", movimientosServicio.listarTodosLosMovimientos());
         
-        return "movimientos";
+        // Retornamos apuntando a la nueva carpeta
+        return "almacenero/movimientos";
     }
 
     // --- GUARDAR MOVIMIENTO DESDE EL MODAL ---
- // --- GUARDAR MOVIMIENTO DESDE EL MODAL ---
     @PostMapping("/movimientos/registrar")
     public String registrarMovimiento(
             @ModelAttribute("nuevoMovimiento") MovimientosInventario movimiento,
@@ -94,6 +93,7 @@ public class AlmacenControlador {
         // 3. Guardamos el movimiento (ahora sí, con entidades reales)
         movimientosServicio.registrarMovimiento(movimiento);
         
+        // El redirect se mantiene igual porque es una URL, no un archivo HTML
         return "redirect:/almacen/movimientos";
     }
 
@@ -101,6 +101,19 @@ public class AlmacenControlador {
     @GetMapping("/stock")
     public String verStock(Model model) {
         model.addAttribute("libros", libroServicio.listarTodosLosLibros());
-        return "stock";
+        
+        // Retornamos apuntando a la nueva carpeta
+        return "almacenero/stock";
+    }
+
+    // --- VISTA DE ALERTAS ---
+    @GetMapping("/alertar")
+    public String verAlertas(Model model) {
+        // NOTA: Por ahora la vista mostrará los datos estáticos del HTML.
+        // Cuando estés listo para hacerlo dinámico, puedes descomentar y usar una línea como esta:
+        // model.addAttribute("librosEnAlerta", inventarioServicio.listarAlertasStock());
+        
+        // Retornamos apuntando a la vista "alertas.html" dentro de la carpeta "almacenero"
+        return "almacenero/alertar";
     }
 }
