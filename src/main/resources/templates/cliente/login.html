@@ -36,8 +36,19 @@
                         </li>
                     </ul>
 
-                    <div th:if="${param.error}" class="alert alert-danger py-2 small text-center" role="alert">
-                        Credenciales incorrectas. Inténtalo de nuevo.
+                    <div th:if="${param.error}" class="alert alert-danger py-2 small text-center alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Correo o contraseña incorrectos, o la cuenta no existe.
+                        <button type="button" class="btn-close" style="padding: 0.8rem;" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div th:if="${param.registroExitoso}" class="alert alert-success py-2 small text-center alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-1"></i> ¡Cuenta creada con éxito! Ahora puedes iniciar sesión.
+                        <button type="button" class="btn-close" style="padding: 0.8rem;" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div th:if="${param.errorRegistro}" class="alert alert-warning py-2 small text-center alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-1"></i> Ese correo ya está registrado. Intenta iniciar sesión.
+                        <button type="button" class="btn-close" style="padding: 0.8rem;" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
                     <div class="tab-content" id="accessTabsContent">
