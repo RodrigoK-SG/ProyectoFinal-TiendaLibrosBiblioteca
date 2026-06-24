@@ -18,7 +18,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/error").permitAll() 
                 // ¡AQUÍ ESTÁ EL CAMBIO! Agregamos "/almacen/**" a la lista
-                .requestMatchers("/", "/catalogo", "/catalogo/**", "/vendedor/**", "/almacen/**").permitAll()
+                .requestMatchers("/", "/catalogo", "/catalogo/**", "/vendedor/**", "/almacen/**", "/admin/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll()
                 .anyRequest().authenticated()
             )

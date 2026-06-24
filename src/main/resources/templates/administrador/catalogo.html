@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alejandría Admin - Catálogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/admin-catalogo.css}">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-admin py-0 mb-4">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand py-3" href="#">Biblioteca Alejandría</a>
+            <ul class="nav nav-tabs mx-auto">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin}">Catálogo de Libros</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/usuarios}">Gestión de Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/sucursales}">Sucursales</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/reportes}">Reportes</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end lh-sm">
+                    <div class="fw-bold fs-6">Carlos Mendoza</div>
+                    <small class="text-muted" style="font-size: 0.75rem;">Admin | Sede Central</small>
+                </div>
+                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person text-secondary"></i>
+                </div>
+                <a href="/logout" class="text-danger text-decoration-none ms-3 small fw-medium">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-5 pb-5">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Gestión de Catálogo</h2>
+                <p class="text-muted small mb-0">Administra los libros disponibles, actualiza inventarios y precios.</p>
+            </div>
+            <button class="btn btn-maroon rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#modalNuevoLibro">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo Libro
+            </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div>
+                        <p class="text-muted small fw-medium mb-1">Libros Activos</p>
+                        <h3 class="fw-bold mb-0" th:text="${totalLibrosActivos != null ? totalLibrosActivos : '1,250'}">1,250</h3>
+                    </div>
+                    <div class="icon-box icon-blue"><i class="bi bi-book"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div>
+                        <p class="text-muted small fw-medium mb-1">Usuarios del Sistema</p>
+                        <h3 class="fw-bold mb-0" th:text="${totalUsuarios != null ? totalUsuarios : '5'}">5</h3>
+                    </div>
+                    <div class="icon-box icon-purple"><i class="bi bi-people"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div>
+                        <p class="text-muted small fw-medium mb-1">Sucursales</p>
+                        <h3 class="fw-bold mb-0" th:text="${totalSucursales != null ? totalSucursales : '2'}">2</h3>
+                    </div>
+                    <div class="icon-box icon-green"><i class="bi bi-building"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="input-group" style="max-width: 350px;">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control bg-light border-start-0 ps-0" placeholder="Buscar por ISBN o título...">
+                </div>
+                <button class="btn btn-outline-secondary rounded-pill px-4 py-2 bg-light">
+                    <i class="bi bi-funnel me-1"></i> Filtros Avanzados
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>ISBN</th>
+                            <th>TÍTULO DEL LIBRO</th>
+                            <th>FORMATO</th>
+                            <th>PRECIO VENTA</th>
+                            <th>PRECIO ALQUILER</th>
+                            <th>ESTADO</th>
+                            <th class="text-end">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-bottom">
+                            <td>9788466361897</td>
+                            <td class="fw-bold text-dark">DUNE</td>
+                            <td>TAPA DURA</td>
+                            <td>S/ 120.00</td>
+                            <td>S/ 15.00</td>
+                            <td><span class="badge-activo">ACTIVO</span></td>
+                            <td class="text-end">
+                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarLibro"
+                                        data-id="1" data-isbn="9788466361897" data-titulo="DUNE" data-formato="TAPA DURA" 
+                                        data-pventa="120.00" data-palquiler="15.00" data-activo="true">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalDesactivarLibro"
+                                        data-id="1" data-titulo="DUNE">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        <tr class="border-bottom">
+                            <td>9788401344497</td>
+                            <td class="fw-bold text-dark">COSMOS</td>
+                            <td>DE BOLSILLO</td>
+                            <td>S/ 45.00</td>
+                            <td>S/ 8.00</td>
+                            <td><span class="badge-activo">ACTIVO</span></td>
+                            <td class="text-end">
+                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarLibro"
+                                        data-id="2" data-isbn="9788401344497" data-titulo="COSMOS" data-formato="DE BOLSILLO" 
+                                        data-pventa="45.00" data-palquiler="8.00" data-activo="true">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalDesactivarLibro"
+                                        data-id="2" data-titulo="COSMOS">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <span class="text-muted small">Mostrando <strong>1</strong> a <strong>2</strong> de <strong>1,250</strong> resultados</span>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0 gap-1">
+                        <li class="page-item disabled"><a class="page-link border-0 text-muted" href="#">Anterior</a></li>
+                        <li class="page-item"><a class="page-link border-0 rounded text-white bg-danger" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link border-0 rounded text-dark" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link border-0 rounded text-dark" href="#">3</a></li>
+                        <li class="page-item disabled"><a class="page-link border-0 text-muted" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link border-0 text-dark" href="#">Siguiente</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalNuevoLibro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center pb-2">
+                    <h5 class="fw-bold mb-0">Registrar Nuevo Libro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/catalogo/nuevo}" method="post" enctype="multipart/form-data">
+                    <div class="modal-body pt-3">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">ISBN</label>
+                                <input type="text" name="isbn" class="form-control" placeholder="Ej: 9788466361897" required>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label">Título del Libro</label>
+                                <input type="text" name="titulo" class="form-control" placeholder="Ej: DUNE" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Formato</label>
+                                <input type="text" name="formato" class="form-control" placeholder="Ej: Tapa Dura" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Precio Venta (S/)</label>
+                                <input type="number" step="0.01" name="precioVenta" class="form-control" placeholder="0.00" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Precio Alquiler (S/)</label>
+                                <input type="number" step="0.01" name="precioAlquiler" class="form-control" placeholder="0.00" required>
+                            </div>
+                        </div>
+
+                        <div class="upload-zone">
+                            <i class="bi bi-upload fs-3 text-secondary mb-2 d-block"></i>
+                            <h6 class="fw-bold mb-1">Subir Portada del Libro</h6>
+                            <p class="text-muted small mb-3">Formatos soportados: JPG, PNG, WEBP (Max. 5MB)</p>
+                            <input type="file" name="portada" id="filePortada" class="d-none" accept="image/*">
+                            <label for="filePortada" class="btn btn-outline-secondary rounded-pill px-4 bg-white text-dark">Seleccionar archivo</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-end gap-2">
+                        <button type="button" class="btn btn-light border px-4 rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-maroon px-4 rounded-pill"><i class="bi bi-check-circle me-1"></i> Guardar Libro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalEditarLibro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-between align-items-center pb-2">
+                    <h5 class="fw-bold mb-0">Editar Información del Libro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/admin/catalogo/editar}" method="post">
+                    <input type="hidden" name="id" id="editId">
+                    
+                    <div class="modal-body pt-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">ISBN</label>
+                                <input type="text" name="isbn" id="editIsbn" class="form-control bg-light" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Categoría</label>
+                                <input type="text" name="categoria" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Título</label>
+                                <input type="text" name="titulo" id="editTitulo" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Formato</label>
+                                <input type="text" name="formato" id="editFormato" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Autor</label>
+                                <input type="text" name="autor" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Precio Venta (S/)</label>
+                                <input type="number" step="0.01" name="precioVenta" id="editPrecioVenta" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Editorial</label>
+                                <input type="text" name="editorial" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Precio Alquiler (S/)</label>
+                                <input type="number" step="0.01" name="precioAlquiler" id="editPrecioAlquiler" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between align-items-center bg-light rounded-bottom px-4">
+                        <div class="form-check form-switch ms-2">
+                            <input class="form-check-input fs-4 mt-1" type="checkbox" role="switch" name="activo" id="editSwitchEstado">
+                            <label class="form-check-label fw-bold text-success ms-2 mt-2" for="editSwitchEstado" id="labelEstadoTexto">Estado del Libro: ACTIVO</label>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-white border px-4 rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-blue px-4 rounded-pill">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalDesactivarLibro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <form th:action="@{/admin/catalogo/desactivar}" method="post">
+                    <input type="hidden" name="id" id="deleteId">
+                    
+                    <div class="modal-body p-0 mb-4">
+                        <div class="mx-auto bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2">¿Desactivar este registro?</h4>
+                        <p class="text-muted mb-0">Estás a punto de ocultar el libro <strong id="deleteTitulo" class="text-dark"></strong> del catálogo público.</p>
+                        <p class="text-muted small">No se eliminará de la base de datos para preservar el historial de ventas.</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-light border px-4 py-2 rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger px-4 py-2 rounded-pill">Desactivar Libro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/admin-catalogo.js}"></script>
+
+</body>
+</html>

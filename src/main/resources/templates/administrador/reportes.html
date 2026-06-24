@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alejandría Admin - Reportes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/admin-reportes.css}">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-admin py-0 mb-4">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand py-3" href="#">Librería SBS</a>
+            <ul class="nav nav-tabs mx-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin}">Catálogo de Libros</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/usuarios}">Gestión de Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/sucursales}">Sucursales</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/admin/reportes}">Reportes</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end lh-sm">
+                    <div class="fw-bold fs-6">Carlos Mendoza</div>
+                    <small class="text-muted" style="font-size: 0.75rem;">Admin | Sede Central</small>
+                </div>
+                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person text-secondary"></i>
+                </div>
+                <a href="/logout" class="text-danger text-decoration-none ms-3 small fw-medium">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-5 pb-5">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Reportes Generales</h2>
+                <p class="text-muted small mb-0">Métricas y rendimiento de ventas de la librería.</p>
+            </div>
+            <button class="btn btn-filter d-flex align-items-center gap-2">
+                <i class="bi bi-funnel"></i> Mes y Año: <span th:text="${mesActual}">Mayo 2026</span>
+            </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-title">Ingresos Totales</div>
+                        <div class="kpi-value" th:text="'S/ ' + ${ingresosTotales}">S/ 15,400</div>
+                    </div>
+                    <div class="icon-wrapper icon-green">
+                        S/
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-title">Libros Vendidos</div>
+                        <div class="kpi-value" th:text="${librosVendidos}">340</div>
+                    </div>
+                    <div class="icon-wrapper icon-blue">
+                        <i class="bi bi-book"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-title">Préstamos Activos</div>
+                        <div class="kpi-value" th:text="${prestamosActivos}">85</div>
+                    </div>
+                    <div class="icon-wrapper icon-purple">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="chart-card">
+                    <h5 class="chart-title">Ventas Físicas vs Online</h5>
+                    <div class="chart-container">
+                        <canvas id="ventasChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-5">
+                <div class="chart-card">
+                    <h5 class="chart-title">Top 5 Libros Más Alquilados</h5>
+                    <div class="chart-container d-flex justify-content-center">
+                        <canvas id="topLibrosChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/admin-reportes.js}"></script>
+
+</body>
+</html>
