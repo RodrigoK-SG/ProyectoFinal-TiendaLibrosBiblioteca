@@ -98,13 +98,13 @@
                             </select>
                         </div>
 
-                        <div class="mb-3" id="zonaLibroExistente">
-                            <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">LIBRO EN STOCK <span class="text-danger">*</span></label>
-                            <select class="form-select text-secondary" id="selectLibro" th:field="*{libro.id}">
-                                <option value="" data-isbn="">Buscar título o ISBN...</option>
-                                <option th:each="l : ${libros}" th:value="${l.id}" th:data-isbn="${l.isbn}" th:text="${l.titulo + ' (' + l.isbn + ')'}"></option>
-                            </select>
-                        </div>
+						<div class="mb-3" id="zonaLibroExistente">
+						    <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">LIBRO EN STOCK <span class="text-danger">*</span></label>
+						    <select class="form-select text-secondary" id="selectLibro" th:field="*{libro}">
+						        <option value="" data-isbn="">Buscar título o ISBN...</option>
+						        <option th:each="l : ${libros}" th:value="${l.id}" th:data-isbn="${l.isbn}" th:text="${l.titulo + ' (' + l.isbn + ')'}"></option>
+						    </select>
+						</div>
 
                         <div class="mb-3" id="zonaLibroNuevo" style="display: none;">
                             <label class="form-label small fw-bold text-muted" style="font-size: 0.75rem;">NUEVO LIBRO (ISBN) <span class="text-danger">*</span></label>

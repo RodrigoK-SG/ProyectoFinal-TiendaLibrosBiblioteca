@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Bibliotecario - Reservas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/bibliotecario.css">
+</head>
+<body class="bg-biblioteca-page min-vh-100 d-flex flex-column position-relative">
+
+    <div th:replace="~{componentes/componente-bibliotecario :: navbar-bibliotecario}"></div>
+
+    <div class="container py-5 flex-grow-1">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0">Gestión de Reservas</h2>
+            <button class="btn btn-maroon px-4 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#modalNuevaReserva">
+                <i class="bi bi-plus-lg me-1"></i> Nueva Reserva
+            </button>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">En Espera</span>
+                        <div class="kpi-icon-wrapper icon-yellow"><i class="bi bi-hourglass-split fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">12</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Notificados (Listos para recoger)</span>
+                        <div class="kpi-icon-wrapper icon-blue"><i class="bi bi-bell fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">5</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Completados (Hoy)</span>
+                        <div class="kpi-icon-wrapper icon-green"><i class="bi bi-check-lg fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">8</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-4 shadow-sm border p-0 overflow-hidden">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-muted small fw-bold py-3 ps-4">FECHA SOLICITUD</th>
+                        <th class="text-muted small fw-bold py-3">LIBRO SOLICITADO</th>
+                        <th class="text-muted small fw-bold py-3">CLIENTE</th>
+                        <th class="text-muted small fw-bold py-3">ESTADO</th>
+                        <th class="text-muted small fw-bold py-3 text-end pe-4">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4 text-secondary">28/05/2026</td>
+                        <td class="fw-semibold text-dark">Cosmos (Ilustrado)</td>
+                        <td class="text-secondary">Juan Perez</td>
+                        <td><span class="badge-estado bg-espera">EN ESPERA</span></td>
+                        <td class="text-end pe-4">
+                            <form action="/bibliotecario/reservas/notificar" method="POST" class="d-inline" id="formNotificar_1">
+                                <input type="hidden" name="reservaId" value="1">
+                                <button type="button" class="btn-action btn-notificar" title="Notificar al Cliente"><i class="bi bi-bell"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="ps-4 text-secondary">26/05/2026</td>
+                        <td class="fw-semibold text-dark">Dune</td>
+                        <td class="text-secondary">Maria Silva</td>
+                        <td><span class="badge-estado bg-notificado">NOTIFICADO</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-action" title="Entregar Libro" data-bs-toggle="modal" data-bs-target="#modalEntrega" data-id="2"><i class="bi bi-check2"></i></button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="ps-4 text-secondary">20/05/2026</td>
+                        <td class="fw-semibold text-dark">El Arte de la Ficción</td>
+                        <td class="text-secondary">Carlos Mendoza</td>
+                        <td><span class="badge-estado bg-cancelado">CANCELADO</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-action" title="Ver Detalles" data-bs-toggle="modal" data-bs-target="#modalDetalleReserva" 
+                                data-cliente="Carlos Mendoza" data-dni="46738291" data-email="carlos.mendoza@email.com" 
+                                data-tel="987 654 321" data-libro="El Arte de la Ficción" data-isbn="978-612-441-015-2" 
+                                data-fecha="20/05/2026 — 14:35 hrs." data-estado="CANCELADO" data-ref="RES-003">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-4">
+        <div id="toastNotificacion" class="toast toast-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body d-flex justify-content-between align-items-start p-3">
+                <div class="d-flex gap-3">
+                    <i class="bi bi-bell-fill mt-1"></i>
+                    <div>
+                        <strong class="d-block mb-1">Notificación enviada con éxito.</strong>
+                        <span class="small opacity-75">Se ha enviado un correo electrónico a informando la disponibilidad del ejemplar.</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNuevaReserva" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-header border-0 pt-4 px-4 pb-0">
+                    <h5 class="fw-bold mb-0">Crear Nueva Reserva de Libro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pb-4 pt-3">
+                    <form action="/bibliotecario/reservas/registrar" method="POST">
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Selección de Libro <span class="text-danger">*</span></label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Buscar libro..." required>
+                            </div>
+                            <div class="border rounded p-2 d-flex align-items-center gap-3">
+                                <div class="bg-light text-primary rounded p-2"><i class="bi bi-book"></i></div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 fw-bold small">Dune</h6>
+                                    <span class="text-muted" style="font-size: 0.7rem;">ISBN: 978-8466361897</span>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success">Disponible</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Selección de Cliente <span class="text-danger">*</span></label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text bg-white"><i class="bi bi-person"></i></span>
+                                <select class="form-select text-secondary" name="clienteId" required>
+                                    <option value="">Juan Perez...</option>
+                                    </select>
+                            </div>
+                            <div class="border rounded p-2 d-flex align-items-center gap-3">
+                                <div class="bg-light text-secondary rounded-circle px-2 py-1"><i class="bi bi-person-fill"></i></div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold small">Juan Perez</h6>
+                                    <span class="text-muted" style="font-size: 0.7rem;">DNI: 12345678</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-light rounded border mb-4">
+                            <h6 class="small fw-bold text-muted mb-2" style="font-size: 0.7rem;">VALORES GENERADOS AUTOMÁTICAMENTE</h6>
+                            <div class="d-flex justify-content-between mb-2 small">
+                                <span class="text-secondary">Fecha de Solicitud</span>
+                                <strong class="text-dark">31/05/2026 (Auto)</strong>
+                            </div>
+                            <div class="d-flex justify-content-between small align-items-center">
+                                <span class="text-secondary">Estado Inicial</span>
+                                <span class="badge-estado bg-espera">EN ESPERA</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-2 mt-2">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4 rounded-3">Confirmar Reserva</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEntrega" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow text-center p-4" style="border-radius: 16px;">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-book fs-1"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-2">Entregar Libro Reservado</h5>
+                <p class="text-muted small mb-4">
+                    ¿Deseas transformar esta reserva activa en un <strong>préstamo formal a domicilio</strong>? El estado de la reserva pasará a <strong class="text-success">COMPLETADO</strong>.
+                </p>
+                
+                <form action="/bibliotecario/reservas/entregar" method="POST">
+                    <input type="hidden" name="reservaId" id="inputEntReservaId">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary w-50" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success w-50 fw-bold">Confirmar Entrega</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDetalleReserva" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-header border-0 pt-4 px-4 pb-0">
+                    <div>
+                        <h5 class="fw-bold mb-0">Detalle de Reserva</h5>
+                        <p class="small text-muted mb-0" id="detRef">N° Ref: RES-003</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-5">
+                            <div class="border rounded text-center p-3 h-100 d-flex flex-column justify-content-center">
+                                <div class="text-primary bg-primary bg-opacity-10 rounded d-inline-flex align-items-center justify-content-center mx-auto mb-2" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-book fs-5"></i>
+                                </div>
+                                <h6 class="fw-bold small mb-1 text-dark" id="detLibro">El Arte de la Ficción</h6>
+                                <span class="text-muted" style="font-size: 0.7rem;" id="detIsbn">ISBN: 978-612...</span>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="border rounded p-3 h-100">
+                                <div class="mb-2">
+                                    <span class="text-muted d-block" style="font-size: 0.7rem;">Cliente</span>
+                                    <strong class="small text-dark" id="detCliente">Carlos Mendoza</strong>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-muted d-block" style="font-size: 0.7rem;">Documento (DNI/RUC)</span>
+                                    <strong class="small text-dark" id="detDni">46738291</strong>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-muted d-block" style="font-size: 0.7rem;">Email</span>
+                                    <strong class="small text-dark" id="detEmail">carlos@email.com</strong>
+                                </div>
+                                <div>
+                                    <span class="text-muted d-block" style="font-size: 0.7rem;">Teléfono</span>
+                                    <strong class="small text-dark" id="detTel">987 654 321</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded p-3">
+                        <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                            <span class="text-secondary small">Fecha de Solicitud</span>
+                            <strong class="text-dark small" id="detFecha">20/05/2026 — 14:35 hrs.</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-secondary small">Estado de la Reserva</span>
+                            <span class="badge-estado bg-cancelado" id="detEstado">CANCELADO</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <button type="button" class="btn btn-maroon px-4 rounded-3" data-bs-dismiss="modal">Cerrar Vista</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bibliotecario.js"></script>
+</body>
+</html>

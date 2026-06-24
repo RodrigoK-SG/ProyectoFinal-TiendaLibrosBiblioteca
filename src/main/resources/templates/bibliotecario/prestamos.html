@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Bibliotecario - Préstamos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/bibliotecario.css">
+</head>
+<body class="bg-biblioteca-page min-vh-100 d-flex flex-column">
+
+    <div th:replace="~{componentes/componente-bibliotecario :: navbar-bibliotecario}"></div>
+
+    <div class="container py-5 flex-grow-1">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0">Control de Préstamos</h2>
+            <button class="btn btn-maroon px-4 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#modalNuevoPrestamo">
+                <i class="bi bi-plus-lg me-1"></i> Registrar Préstamo
+            </button>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">En Curso</span>
+                        <div class="kpi-icon-wrapper icon-blue"><i class="bi bi-book fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">24</h2> </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Retrasados</span>
+                        <div class="kpi-icon-wrapper icon-red"><i class="bi bi-clock-history fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">3</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Multas Pendientes</span>
+                        <div class="kpi-icon-wrapper icon-yellow"><i class="bi bi-exclamation-triangle fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">S/ 45.00</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-4 shadow-sm border p-0 overflow-hidden">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-muted small fw-bold py-3 ps-4">CÓD. EJEMPLAR</th>
+                        <th class="text-muted small fw-bold py-3">CLIENTE</th>
+                        <th class="text-muted small fw-bold py-3">TIPO</th>
+                        <th class="text-muted small fw-bold py-3">VENCIMIENTO</th>
+                        <th class="text-muted small fw-bold py-3">ESTADO</th>
+                        <th class="text-muted small fw-bold py-3 text-end pe-4">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark">COSMOS-001</td>
+                        <td class="text-secondary">Juan Perez</td>
+                        <td><span class="badge-estado bg-tipo">DOMICILIO</span></td>
+                        <td class="text-secondary">30/06/2026</td>
+                        <td><span class="badge-estado bg-curso">EN CURSO</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-action" title="Registrar Devolución" data-bs-toggle="modal" data-bs-target="#modalDevolucion" data-ejemplar="COSMOS-001" data-id="1"><i class="bi bi-check2"></i></button>
+                            <button class="btn-action" title="Renovar Préstamo" data-bs-toggle="modal" data-bs-target="#modalRenovacion" data-ejemplar="COSMOS-001" data-cliente="Juan Perez" data-id="1"><i class="bi bi-arrow-repeat"></i></button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark">DUNE-001</td>
+                        <td class="text-secondary">Universidad Nacional</td>
+                        <td><span class="badge-estado bg-tipo">SALA</span></td>
+                        <td class="text-secondary">27/05/2026</td>
+                        <td><span class="badge-estado bg-retrasado">RETRASADO</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-action" title="Registrar Devolución" data-bs-toggle="modal" data-bs-target="#modalDevolucion" data-ejemplar="DUNE-001" data-id="2"><i class="bi bi-check2"></i></button>
+                            <button class="btn-action" title="Aplicar Penalización" data-bs-toggle="modal" data-bs-target="#modalPenalizacion" data-ejemplar="DUNE-001" data-cliente="Universidad Nacional" data-id="2"><i class="bi bi-hammer text-danger"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNuevoPrestamo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-header border-0 pt-4 px-4 pb-2">
+                    <h5 class="fw-bold mb-0">Registrar Nuevo Préstamo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <form action="/bibliotecario/prestamos/registrar" method="POST">
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Búsqueda de Ejemplar <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-upc-scan"></i></span>
+                                <input type="text" class="form-control" name="codigoBarras" placeholder="DUNE-001..." required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Cliente <span class="text-danger">*</span></label>
+                            <select class="form-select text-secondary" name="clienteId" required>
+                                <option value="">Buscar por DNI/RUC o Nombre...</option>
+                                </select>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-muted">Tipo de Préstamo <span class="text-danger">*</span></label>
+                                <select class="form-select text-secondary" name="tipoPrestamo" required>
+                                    <option value="DOMICILIO">Domicilio</option>
+                                    <option value="SALA">Lectura en Sala</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-muted">Fecha de Devolución <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control text-secondary" name="fechaDevolucionEsperada" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Costo de Alquiler (Opcional)</label>
+                            <div class="input-group" style="width: 50%;">
+                                <span class="input-group-text bg-light text-muted">S/</span>
+                                <input type="number" step="0.01" class="form-control text-end" name="costoAlquiler" value="0.00">
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-2">
+                            <button type="button" class="btn text-muted" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4 rounded-3">Confirmar Préstamo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalDevolucion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow text-center p-4" style="border-radius: 16px;">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-check-lg fs-1"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-2">¿Registrar Devolución?</h5>
+                <p class="text-muted small mb-4">
+                    Se registrará la entrega del ejemplar <strong class="text-dark" id="txtDevEjemplar">COSMOS-001</strong> en la fecha actual. La situación del libro cambiará automáticamente a <strong class="text-success">DISPONIBLE</strong>.
+                </p>
+                
+                <form action="/bibliotecario/prestamos/devolver" method="POST">
+                    <input type="hidden" name="prestamoId" id="inputDevPrestamoId">
+                    <div class="mb-4 text-start">
+                        <label class="form-label small fw-bold text-muted">Validar Estado Físico</label>
+                        <select class="form-select text-secondary" name="estadoFisico" required>
+                            <option value="BUENO">Bueno (Sin daños nuevos)</option>
+                            <option value="DETERIORADO">Deteriorado (Requiere revisión)</option>
+                            <option value="PARA_DESCARTE">Para Descarte</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light w-50" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-maroon w-50">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRenovacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="bi bi-arrow-repeat fs-3"></i>
+                        </div>
+                    </div>
+                    <h5 class="fw-bold mb-2">Procesar Renovación de Préstamo</h5>
+                    <p class="text-muted small mb-4">
+                        Se extenderá el plazo de devolución para el cliente <strong class="text-dark" id="txtRenCliente">Juan Perez</strong>, ejemplar <strong class="text-dark" id="txtRenEjemplar">COSMOS-001</strong>.
+                    </p>
+                    
+                    <form action="/bibliotecario/prestamos/renovar" method="POST">
+                        <input type="hidden" name="prestamoId" id="inputRenPrestamoId">
+                        <div class="mb-4 text-start">
+                            <label class="form-label small fw-bold text-muted">Nueva Fecha Límite</label>
+                            <input type="date" class="form-control" name="nuevaFechaDevolucion" required>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4">Aplicar Renovación</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPenalizacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-header border-0 pt-4 px-4 pb-2">
+                    <h5 class="fw-bold mb-0">Registrar Nueva Multa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pb-4">
+                    <form action="/bibliotecario/prestamos/penalizar" method="POST">
+                        <input type="hidden" name="prestamoId" id="inputPenPrestamoId">
+                        
+                        <div class="mb-3">
+                            <div class="p-2 bg-light border rounded small text-muted">
+                                <span id="txtPenEjemplar" class="fw-bold text-dark">DUNE-001</span> • <span id="txtPenCliente">Universidad Nacional</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Motivo de la Sanción <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="motivo" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Monto de la Multa <span class="text-danger">*</span></label>
+                            <div class="input-group w-50">
+                                <span class="input-group-text bg-light text-muted">S/</span>
+                                <input type="number" step="0.01" class="form-control text-end fw-bold text-danger" name="monto" value="15.00" required>
+                            </div>
+                            <div class="form-text small mt-2"><i class="bi bi-exclamation-triangle me-1"></i>El estado inicial de esta penalización se registrará como <strong>PENDIENTE</strong>.</div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-2">
+                            <button type="button" class="btn text-muted" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-maroon px-4 rounded-3">Aplicar Sanción</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bibliotecario.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Bibliotecario - Penalizaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/bibliotecario.css">
+</head>
+<body class="bg-biblioteca-page min-vh-100 d-flex flex-column">
+
+    <div th:replace="~{componentes/componente-bibliotecario :: navbar-bibliotecario}"></div>
+
+    <div class="container py-5 flex-grow-1">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0">Registro de Penalizaciones</h2>
+            <div class="input-group" style="width: 300px;">
+                <input type="text" class="form-control" placeholder="Buscar por Cliente o Cód...">
+                <button class="btn btn-outline-secondary bg-white" type="button"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Deuda Pendiente</span>
+                        <div class="kpi-icon-wrapper icon-red"><i class="bi bi-exclamation-triangle fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-danger">S/ 120.00</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Pagado este mes</span>
+                        <div class="kpi-icon-wrapper icon-green-money"><i class="bi bi-currency-dollar fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-success">S/ 85.00</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="kpi-card bg-white p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="text-muted fw-semibold">Multas Perdonadas</span>
+                        <div class="kpi-icon-wrapper icon-gray-shield"><i class="bi bi-shield-check fs-5"></i></div>
+                    </div>
+                    <h2 class="fw-bold mb-0 text-dark">3</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-4 shadow-sm border p-0 overflow-hidden">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="text-muted small fw-bold py-3 ps-4">N° PRÉSTAMO / EJEMPLAR</th>
+                        <th class="text-muted small fw-bold py-3">CLIENTE</th>
+                        <th class="text-muted small fw-bold py-3">MOTIVO DE MULTA</th>
+                        <th class="text-muted small fw-bold py-3">MONTO</th>
+                        <th class="text-muted small fw-bold py-3">ESTADO</th>
+                        <th class="text-muted small fw-bold py-3 text-end pe-4">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark">DUNE-001</td>
+                        <td class="text-secondary">Universidad Nacional</td>
+                        <td class="text-secondary small">Retraso en devolución (5 días)</td>
+                        <td class="fw-bold text-dark">S/ 10.00</td>
+                        <td><span class="badge-estado bg-pendiente">PENDIENTE</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-pago-multa" data-bs-toggle="modal" data-bs-target="#modalPagoMulta" 
+                                data-id="1" data-monto="10.00" data-motivo="Retraso en devolución (5 días)">
+                                <i class="bi bi-credit-card me-1"></i> Registrar Pago
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark">COSMOS-001</td>
+                        <td class="text-secondary">Juan Perez</td>
+                        <td class="text-secondary small">Daño extra en hojas internas</td>
+                        <td class="fw-bold text-dark">S/ 15.00</td>
+                        <td><span class="badge-estado bg-pendiente">PENDIENTE</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-pago-multa" data-bs-toggle="modal" data-bs-target="#modalPagoMulta" 
+                                data-id="2" data-monto="15.00" data-motivo="Daño extra en hojas internas">
+                                <i class="bi bi-credit-card me-1"></i> Registrar Pago
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="ps-4 fw-semibold text-dark">EL-TUNEL-002</td>
+                        <td class="text-secondary">Maria Silva</td>
+                        <td class="text-secondary small">Pérdida de forro protector</td>
+                        <td class="fw-bold text-dark">S/ 5.00</td>
+                        <td><span class="badge-estado bg-pagado">PAGADO</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn-action" title="Ver Comprobante" data-bs-toggle="modal" data-bs-target="#modalComprobante"
+                                data-operacion="PEN-PAG-084" data-cliente="Maria Silva" data-motivo="Pérdida de forro protector"
+                                data-monto="5.00" data-fecha="31/05/2026">
+                                <i class="bi bi-receipt fs-5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPagoMulta" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow text-center p-4" style="border-radius: 16px;">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-success bg-opacity-10 text-success d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <i class="bi bi-check-lg fs-1"></i>
+                    </div>
+                </div>
+                <h5 class="fw-bold mb-3">¿Confirmar Pago de Multa?</h5>
+                <p class="text-muted small mb-4">
+                    Se registrará el cobro de <strong class="text-dark" id="txtPagoMonto">S/ 0.00</strong> al cliente por el motivo: <strong class="text-dark" id="txtPagoMotivo">Motivo</strong>. El estado de la penalización cambiará a <strong class="text-success">PAGADO</strong>.
+                </p>
+                
+                <form action="/bibliotecario/penalizaciones/pagar" method="POST">
+                    <input type="hidden" name="penalizacionId" id="inputPagoPenalizacionId">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary w-50" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success w-50 fw-bold">Confirmar Pago</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalComprobante" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+                <div class="modal-header border-0 pt-4 px-4 pb-0">
+                    <div>
+                        <h5 class="fw-bold mb-0">Comprobante de Caja</h5>
+                        <p class="small text-muted mb-0">Biblioteca SBS</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    
+                    <div class="border rounded p-4 mb-4 bg-light bg-opacity-50">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary small">N° Operación</span>
+                            <strong class="text-dark small" id="compOperacion">PEN-PAG-000</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary small">Cliente</span>
+                            <strong class="text-dark small" id="compCliente">Cliente Name</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary small">Motivo</span>
+                            <strong class="text-dark small" id="compMotivo">Motivo description</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary small">Monto Cancelado</span>
+                            <strong class="text-dark small">S/ <span id="compMonto">0.00</span></strong>
+                        </div>
+                        <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                            <span class="text-secondary small">Fecha de Pago</span>
+                            <strong class="text-dark small" id="compFecha">00/00/0000</strong>
+                        </div>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <span class="badge border border-success text-success px-3 py-2 rounded-pill bg-success bg-opacity-10">
+                            <i class="bi bi-check-lg me-1"></i> PAGADO
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-maroon px-4 rounded-3" onclick="window.print()">
+                            <i class="bi bi-printer me-1"></i> Imprimir Recibo
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary px-4 rounded-3" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bibliotecario.js"></script>
+</body>
+</html>

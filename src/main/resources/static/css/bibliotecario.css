@@ -1,0 +1,112 @@
+/* Fondo general */
+.bg-biblioteca-page {
+    background-color: #f8f9fa !important;
+}
+
+/* Tarjetas de Estadísticas (KPIs) */
+.kpi-card {
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+/* Iconos de las tarjetas */
+.kpi-icon-wrapper {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+.icon-blue { background-color: #e0f2fe; color: #0284c7; }
+.icon-red { background-color: #fee2e2; color: #dc2626; }
+.icon-yellow { background-color: #fef3c7; color: #d97706; }
+
+/* Botón principal */
+.btn-maroon {
+    background-color: #c86b66;
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-maroon:hover {
+    background-color: #b05a56;
+    color: white;
+}
+
+/* Etiquetas de Estado de la Tabla */
+.badge-estado {
+    padding: 0.4em 0.8em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 6px;
+}
+.bg-curso { background-color: #e0f2fe; color: #0369a1; }
+.bg-retrasado { background-color: #fee2e2; color: #b91c1c; }
+.bg-devuelto { background-color: #dcfce7; color: #15803d; }
+.bg-tipo { background-color: #f1f5f9; color: #475569; }
+
+/* Botones de acción en la tabla */
+.btn-action {
+    color: #94a3b8;
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.btn-action:hover {
+    color: #334155;
+    background-color: #f1f5f9;
+}
+
+
+/* --- NUEVOS ESTILOS PARA RESERVAS --- */
+
+/* Etiquetas de Estado de Reservas */
+.bg-espera { background-color: #fef3c7; color: #d97706; }
+.bg-notificado { background-color: #e0f2fe; color: #0284c7; }
+.bg-cancelado { background-color: #f1f5f9; color: #64748b; }
+
+/* Iconos KPI Reservas */
+.icon-green { background-color: #dcfce7; color: #16a34a; }
+
+/* Toast de Notificación Oscuro */
+.toast-dark {
+    background-color: #1e293b;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- NUEVOS ESTILOS PARA PENALIZACIONES --- */
+
+/* Etiquetas de Estado de Multas */
+.bg-pendiente { background-color: #fee2e2; color: #b91c1c; }
+.bg-pagado { background-color: #dcfce7; color: #15803d; }
+.bg-perdonado { background-color: #f1f5f9; color: #475569; }
+
+/* Botones específicos de tabla de multas */
+.btn-pago-multa {
+    background-color: #c86b66;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.2s;
+}
+.btn-pago-multa:hover {
+    background-color: #b05a56;
+    color: white;
+}
+
+/* Iconos KPI Penalizaciones */
+.icon-green-money { background-color: #dcfce7; color: #16a34a; }
+.icon-gray-shield { background-color: #f1f5f9; color: #64748b; }
