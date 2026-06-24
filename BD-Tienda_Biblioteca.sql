@@ -499,7 +499,7 @@ INSERT INTO RESERVA_BIBLIOTECA (LIBRO_ID, CLIENTE_ID, ESTADO) VALUES
 -- También aseguramos que el campo ACTIVO esté en true (1) por si acaso
 UPDATE USUARIO 
 SET 
-    PASSWORD_HASH = '$2a$10$7v.9UEM77DfsX8G9DAnWxeN8f.UoEshYnbeZ0qicP6GfNfQWfI6t2',
+    PASSWORD_HASH = '$2a$10$S2vE3fgmYApEz5isbGn5HecfO1Np7UyfdtNhuWeaqwnfyXiPcB7w.',
     ACTIVO = 1
 WHERE EMAIL IN (
     'admin@tienda.com', 
@@ -513,3 +513,5 @@ SELECT u.ID, u.NOMBRE_COMPLETO, u.EMAIL, r.NOMBRE as ROL
 FROM USUARIO u
 JOIN USUARIO_ROL ur ON u.ID = ur.USUARIO_ID
 JOIN ROL r ON ur.ROL_ID = r.ID;
+
+Select * from usuario;
