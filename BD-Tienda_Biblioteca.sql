@@ -494,3 +494,22 @@ INSERT INTO PENALIZACION (PRESTAMO_ID, MOTIVO, MONTO, ESTADO) VALUES
 
 INSERT INTO RESERVA_BIBLIOTECA (LIBRO_ID, CLIENTE_ID, ESTADO) VALUES
 (2, 1, 'EN_ESPERA');
+
+-- Actualizamos la contraseña de todos a "password123" usando su hash real de BCrypt
+-- También aseguramos que el campo ACTIVO esté en true (1) por si acaso
+UPDATE USUARIO 
+SET 
+    PASSWORD_HASH = '$2a$10$7v.9UEM77DfsX8G9DAnWxeN8f.UoEshYnbeZ0qicP6GfNfQWfI6t2',
+    ACTIVO = 1
+WHERE EMAIL IN (
+    'admin@tienda.com', 
+    'ventas@tienda.com', 
+    'biblioteca@tienda.com', 
+    'almacen@tienda.com', 
+    'juan@gmail.com'
+);
+
+SELECT u.ID, u.NOMBRE_COMPLETO, u.EMAIL, r.NOMBRE as ROL
+FROM USUARIO u
+JOIN USUARIO_ROL ur ON u.ID = ur.USUARIO_ID
+JOIN ROL r ON ur.ROL_ID = r.ID;
