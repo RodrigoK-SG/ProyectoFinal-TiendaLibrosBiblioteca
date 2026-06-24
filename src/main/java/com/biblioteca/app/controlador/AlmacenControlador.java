@@ -32,6 +32,12 @@ public class AlmacenControlador {
     // Inyectamos el servicio de la Sucursal para solucionar el error 500
     private final SucursalServicio sucursalServicio; 
 
+    @GetMapping({"", "/"})
+    public String inicioAlmacen() {
+        // Redirige automáticamente a la pestaña principal
+        return "redirect:/almacen/movimientos";
+    }
+    
     // --- VISTA DE MOVIMIENTOS ---
     @GetMapping("/movimientos")
     public String verMovimientos(Model model) {
