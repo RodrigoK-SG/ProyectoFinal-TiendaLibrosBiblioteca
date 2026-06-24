@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,23 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/almacen/stock}">Stock General</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/almacen/alertar}">Alertas</a></li>
             </ul>
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end d-none d-md-block">
+                    <div class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">
+                        <i class="bi bi-person-circle me-1 text-muted"></i> 
+                        <span sec:authentication="name">usuario@correo.com</span>
+                    </div>
+                    <div class="text-muted" style="font-size: 0.75rem;">Almacén</div>
+                </div>
+                
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-semibold">
+                        <i class="bi bi-box-arrow-right"></i> Salir
+                    </button>
+                </form>
+            </div>
+            
         </div>
     </nav>
 
