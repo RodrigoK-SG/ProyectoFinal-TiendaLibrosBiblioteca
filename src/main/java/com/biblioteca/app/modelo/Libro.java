@@ -27,7 +27,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "LIBRO")
 @Getter @Setter @NoArgsConstructor
-@ToString(exclude = {"autores", "categorias"})
+@ToString(exclude = {"autores", "categorias", "editorial"})
 public class Libro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -59,7 +59,7 @@ public class Libro {
     @Column(name = "PRECIO_ALQUILER_ACTUAL") 
     private BigDecimal precioAlquilerActual;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // Cambia LAZY por EAGER
     @JoinColumn(name = "EDITORIAL_ID", nullable = false) 
     private Editorial editorial;
     

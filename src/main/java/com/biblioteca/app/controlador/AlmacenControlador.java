@@ -131,8 +131,11 @@ public class AlmacenControlador {
     // ... Todo lo de abajo queda igual ...
 
     // --- VISTA DE ALERTAS ---
+ // --- VISTA DE ALERTAS ---
     @GetMapping("/alertar")
     public String verAlertas(Model model) {
+        // Mandamos la lista filtrada a la vista
+        model.addAttribute("listaAlertas", inventarioServicio.listarAlertasStock());
         return "almacenero/alertar";
     }
 }

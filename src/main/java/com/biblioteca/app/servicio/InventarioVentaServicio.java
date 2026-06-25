@@ -43,6 +43,8 @@ public class InventarioVentaServicio {
     }
 
     // --- NUEVO MÉTODO PARA LA VISTA DE STOCK GENERAL ---
+ // ... Tus métodos anteriores ...
+
     @Transactional(readOnly = true)
     public List<StockLibroDTO> listarStockGeneral() {
         List<InventarioVenta> inventarios = inventarioRepository.findAll();
@@ -50,9 +52,8 @@ public class InventarioVentaServicio {
         return inventarios.stream().map(inv -> {
             String estado;
             int disp = inv.getCantidadDisponible();
-            int min = (inv.getStockMinimo() != null) ? inv.getStockMinimo() : 5; // Valor por defecto si es nulo
+            int min = (inv.getStockMinimo() != null) ? inv.getStockMinimo() : 5;
             
-            // Lógica para los badges visuales
             if (disp <= 0) {
                 estado = "AGOTADO";
             } else if (disp <= min) {
@@ -71,8 +72,18 @@ public class InventarioVentaServicio {
                 inv.getLibro().getPrecioVentaActual(),
                 disp,
                 estado,
-                inv.getLibro().getActivo()
+                inv.getLibro().getActivo(),
+                min // <-- AÑADIDO AQUÍ
             );
         }).collect(Collectors.toList());
+    }
+
+    // --- NUEVO MÉTODO PARA LA VISTA DE ALERTAS ---
+    @Transactional(readOnly = true)
+    public List<StockLibroDTO> listarAlertasStock() {
+        // Obtenemos todo el stock, pero lo filtramos para quedarnos SOLO con las alertas
+        return listarStockGeneral().stream()
+                .filter(dto -> dto.getEstadoStock().equals("BAJO") || dto.getEstadoStock().equals("AGOTADO"))
+                .collect(Collectors.toList());
     }
 }

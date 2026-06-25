@@ -17,4 +17,5 @@ public class StockLibroDTO {
     private Integer cantidadDisponible;
     private String estadoStock; // "ALTO", "SUFICIENTE", "BAJO", "AGOTADO"
     private boolean activoCatalogo;
+    private Integer stockMinimo; // <-- NUEVO CAMPO AÑADIDO
 }
