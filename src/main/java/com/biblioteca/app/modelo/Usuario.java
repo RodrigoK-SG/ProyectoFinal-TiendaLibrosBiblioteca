@@ -38,7 +38,4 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "ROL_ID")
     )
     private List<Rol> roles;
-    
-    @Column(name = "NRO_DOCUMENTO", length = 15)
-    private String nroDocumento;
 }

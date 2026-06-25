@@ -495,8 +495,6 @@ INSERT INTO PENALIZACION (PRESTAMO_ID, MOTIVO, MONTO, ESTADO) VALUES
 INSERT INTO RESERVA_BIBLIOTECA (LIBRO_ID, CLIENTE_ID, ESTADO) VALUES
 (2, 1, 'EN_ESPERA');
 
--- Actualizamos la contraseña de todos a "password123" usando su hash real de BCrypt
--- También aseguramos que el campo ACTIVO esté en true (1) por si acaso
 UPDATE USUARIO 
 SET 
     PASSWORD_HASH = '$2a$10$S2vE3fgmYApEz5isbGn5HecfO1Np7UyfdtNhuWeaqwnfyXiPcB7w.',
