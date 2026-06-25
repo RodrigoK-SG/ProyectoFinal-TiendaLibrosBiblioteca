@@ -38,4 +38,13 @@ public class EditorialServicio {
     	Editorial editorial = buscarPorId(id);
         editorialRepositorio.delete(editorial);
     }
+    
+    @Transactional(readOnly = true)
+    public Editorial obtenerOAsignarDefault(String nombre) {
+        if (nombre == null || nombre.isEmpty()) return buscarPorId(1);
+        
+        // Asumiendo que tienes este método en tu repositorio:
+        return editorialRepositorio.findByNombreIgnoreCase(nombre)
+                .orElse(buscarPorId(1));
+    }
 }

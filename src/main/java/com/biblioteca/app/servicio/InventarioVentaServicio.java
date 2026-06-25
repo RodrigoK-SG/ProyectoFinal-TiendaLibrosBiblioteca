@@ -1,10 +1,14 @@
 package com.biblioteca.app.servicio;
 
+import com.biblioteca.app.modelo.StockLibroDTO;
 import com.biblioteca.app.modelo.InventarioVenta;
 import com.biblioteca.app.repositorio.InventarioVentaRepositorio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +40,39 @@ public class InventarioVentaServicio {
     @Transactional
     public InventarioVenta actualizarInventario(InventarioVenta inventario) {
         return inventarioRepository.save(inventario);
+    }
+
+    // --- NUEVO MÉTODO PARA LA VISTA DE STOCK GENERAL ---
+    @Transactional(readOnly = true)
+    public List<StockLibroDTO> listarStockGeneral() {
+        List<InventarioVenta> inventarios = inventarioRepository.findAll();
+        
+        return inventarios.stream().map(inv -> {
+            String estado;
+            int disp = inv.getCantidadDisponible();
+            int min = (inv.getStockMinimo() != null) ? inv.getStockMinimo() : 5; // Valor por defecto si es nulo
+            
+            // Lógica para los badges visuales
+            if (disp <= 0) {
+                estado = "AGOTADO";
+            } else if (disp <= min) {
+                estado = "BAJO";
+            } else if (disp < (min * 3)) {
+                estado = "SUFICIENTE";
+            } else {
+                estado = "ALTO";
+            }
+            
+            return new StockLibroDTO(
+                inv.getLibro().getTitulo(),
+                inv.getLibro().getIsbn(),
+                inv.getLibro().getSlug(),
+                inv.getLibro().getEditorial() != null ? inv.getLibro().getEditorial().getNombre() : "Sin Editorial",
+                inv.getLibro().getPrecioVentaActual(),
+                disp,
+                estado,
+                inv.getLibro().getActivo()
+            );
+        }).collect(Collectors.toList());
     }
 }
