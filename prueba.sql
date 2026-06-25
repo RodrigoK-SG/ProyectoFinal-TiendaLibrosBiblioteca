@@ -49,3 +49,25 @@ INSERT INTO LIBRO_CATEGORIA (LIBRO_ID, CATEGORIA_ID) VALUES
 ((SELECT ID FROM LIBRO WHERE ISBN = '9788477027317'), (SELECT ID FROM CATEGORIA WHERE NOMBRE = 'TERROR')),
 ((SELECT ID FROM LIBRO WHERE ISBN = '9788498383393'), (SELECT ID FROM CATEGORIA WHERE NOMBRE = 'FANTASIA')),
 ((SELECT ID FROM LIBRO WHERE ISBN = '9786123164911'), (SELECT ID FROM CATEGORIA WHERE NOMBRE = 'HISTORIA'));
+
+
+ALTER TABLE USUARIO ADD COLUMN NRO_DOCUMENTO VARCHAR(15);
+ALTER TABLE PEDIDO MODIFY COLUMN CANAL_VENTA VARCHAR(20) NULL;
+
+
+
+
+-- 1. Quitamos temporalmente el modo seguro para aplicar los cambios de emergencia
+SET SQL_SAFE_UPDATES = 0;
+
+-- 2. Aseguramos que la columna ESTADO del historial acepte textos largos (le damos VARCHAR de 50)
+ALTER TABLE historial_estado_pedido MODIFY COLUMN ESTADO VARCHAR(50) NOT NULL;
+
+-- 3. Por si acaso, si la columna 'comentario' o 'notas' de esa misma tabla tiene límites cortos, la ampliamos
+ALTER TABLE historial_estado_pedido MODIFY COLUMN comentario VARCHAR(255);
+
+-- 4. De paso, eliminamos la restricción estricta de CANAL_VENTA en la tabla pedido que vimos antes
+ALTER TABLE PEDIDO MODIFY COLUMN CANAL_VENTA VARCHAR(50) NULL;
+
+-- 5. Volvemos a activar el modo seguro
+SET SQL_SAFE_UPDATES = 1;
