@@ -20,10 +20,15 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/reportes}">Reportes</a></li>
             </ul>
             <div class="d-flex align-items-center gap-3">
-                <div class="text-end lh-sm">
-                    <div class="fw-bold fs-6">Carlos Mendoza</div>
-                    <small class="text-muted" style="font-size: 0.75rem;">Admin | Sede Central</small>
+                
+                <div class="text-end lh-sm" th:if="${usuarioLogueado != null}">
+                    <div class="fw-bold fs-6" th:text="${usuarioLogueado.nombreCompleto}">Nombre Usuario</div>
+                    <small class="text-muted" style="font-size: 0.75rem;" 
+                           th:text="${!usuarioLogueado.roles.isEmpty() ? usuarioLogueado.roles[0].nombre : 'SIN ROL'} + ' | Sede Central'">
+                        Rol | Sede Central
+                    </small>
                 </div>
+                
                 <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;">
                     <i class="bi bi-person text-secondary"></i>
                 </div>
@@ -46,6 +51,15 @@
             </button>
         </div>
 
+        <div th:if="${exito}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i><span th:text="${exito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-borderless align-middle mb-0">
@@ -60,70 +74,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="fw-bold text-dark">Laura Gomez</td>
-                            <td>ventas@tienda.com</td>
-                            <td class="text-muted">VENDEDOR</td>
-                            <td>12 May 2026</td>
-                            <td><span class="badge-activo">ACTIVO</span></td>
+                        <tr th:each="usuario : ${usuarios}">
+                            <td class="fw-bold text-dark" th:text="${usuario.nombreCompleto}">Nombre</td>
+                            <td th:text="${usuario.email}">email</td>
+                            <td class="text-muted fw-bold" th:text="${!usuario.roles.isEmpty() ? usuario.roles[0].nombre : 'SIN ROL'}">ROL</td>
+                            <td th:text="${#temporals.format(usuario.creadoEn, 'dd MMM yyyy')}">12 May 2026</td>
+                            <td>
+                                <span th:class="${usuario.activo} ? 'badge-activo' : 'badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1 rounded'" 
+                                      th:text="${usuario.activo} ? 'ACTIVO' : 'INACTIVO'">ESTADO</span>
+                            </td>
                             <td class="text-end">
                                 <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
-                                        data-id="1" data-nombre="Laura Gomez" data-email="ventas@tienda.com" 
-                                        data-rol="VENDEDOR" data-activo="true">
+                                        th:data-id="${usuario.id}" 
+                                        th:data-nombre="${usuario.nombreCompleto}" 
+                                        th:data-email="${usuario.email}" 
+                                        th:data-rol="${!usuario.roles.isEmpty() ? usuario.roles[0].nombre : ''}" 
+                                        th:data-activo="${usuario.activo}">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalDesactivarUsuario"
-                                        data-id="1" data-nombre="Laura Gomez">
+                                <button th:if="${usuario.activo}" class="btn-action text-danger" data-bs-toggle="modal" data-bs-target="#modalDesactivarUsuario"
+                                        th:data-id="${usuario.id}" th:data-nombre="${usuario.nombreCompleto}">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
                         </tr>
-                        
-                        <tr>
-                            <td class="fw-bold text-dark">Carlos Mendoza</td>
-                            <td>admin@tienda.com</td>
-                            <td class="text-muted">ADMINISTRADOR</td>
-                            <td>12 May 2026</td>
-                            <td><span class="badge-activo">ACTIVO</span></td>
-                            <td class="text-end">
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
-                                        data-id="2" data-nombre="Carlos Mendoza" data-email="admin@tienda.com" 
-                                        data-rol="ADMINISTRADOR" data-activo="true">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalDesactivarUsuario"
-                                        data-id="2" data-nombre="Carlos Mendoza">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        
-                        <tr>
-                            <td class="fw-bold text-dark">Andres Ruiz</td>
-                            <td>biblioteca@tienda.com</td>
-                            <td class="text-muted">BIBLIOTECARIO</td>
-                            <td>12 May 2026</td>
-                            <td><span class="badge-activo">ACTIVO</span></td>
-                            <td class="text-end">
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
-                                        data-id="3" data-nombre="Andres Ruiz" data-email="biblioteca@tienda.com" 
-                                        data-rol="BIBLIOTECARIO" data-activo="true">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalDesactivarUsuario"
-                                        data-id="3" data-nombre="Andres Ruiz">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
+                        <tr th:if="${#lists.isEmpty(usuarios)}">
+                            <td colspan="6" class="text-center text-muted py-4">No hay usuarios registrados.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
-
-
-    <div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-hidden="true">
+    </div> <div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center pb-0 border-0">

@@ -1,6 +1,7 @@
 package com.biblioteca.app.modelo;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,4 +48,7 @@ public class Pedido {
     
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles = new ArrayList<>();
+    
+    @Column(name = "FECHA_PEDIDO", nullable = false)
+    private LocalDateTime fechaPedido;
 }

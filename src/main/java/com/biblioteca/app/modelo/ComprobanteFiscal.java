@@ -18,24 +18,20 @@ public class ComprobanteFiscal {
     @JoinColumn(name = "PEDIDO_ID", nullable = false) 
     private Pedido pedido;
     
-    // Relación con el Pago que agregamos para el servicio
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PAGO_ID", nullable = false)
-    private Pago pago;
-    
     @Enumerated(EnumType.STRING) 
     @Column(name = "TIPO_COMPROBANTE", nullable = false) 
     private TipoComprobante tipoComprobante;
     
     @Column(nullable = false, length = 10) 
-    private String serie; // <-- Tu campo original (Correcto)
+    private String serie;
     
     @Column(nullable = false, length = 20) 
-    private String numero; // <-- Tu campo original (Correcto)
+    private String numero;
     
     @Column(name = "MONTO_IMPUESTO", nullable = false) 
     private BigDecimal montoImpuesto;
     
     @Column(name = "MONTO_TOTAL", nullable = false) 
     private BigDecimal montoTotal;
+
 }

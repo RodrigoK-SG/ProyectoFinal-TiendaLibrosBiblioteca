@@ -20,10 +20,15 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/admin/reportes}">Reportes</a></li>
             </ul>
             <div class="d-flex align-items-center gap-3">
-                <div class="text-end lh-sm">
-                    <div class="fw-bold fs-6">Carlos Mendoza</div>
-                    <small class="text-muted" style="font-size: 0.75rem;">Admin | Sede Central</small>
+                
+                <div class="text-end lh-sm" th:if="${usuarioLogueado != null}">
+                    <div class="fw-bold fs-6" th:text="${usuarioLogueado.nombreCompleto}">Nombre Usuario</div>
+                    <small class="text-muted" style="font-size: 0.75rem;" 
+                           th:text="${!usuarioLogueado.roles.isEmpty() ? usuarioLogueado.roles[0].nombre : 'SIN ROL'} + ' | Sede Central'">
+                        Rol | Sede Central
+                    </small>
                 </div>
+
                 <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px;">
                     <i class="bi bi-person text-secondary"></i>
                 </div>
@@ -46,6 +51,15 @@
             </button>
         </div>
 
+        <div th:if="${exito}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i><span th:text="${exito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-borderless align-middle mb-0">
@@ -59,47 +73,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="fw-bold text-dark">Sede Central</td>
-                            <td>Av. Lima 123</td>
-                            <td>999111222</td>
-                            <td><span class="badge-biblioteca-si">SI (HABILITADO)</span></td>
+                        <tr th:each="sucursal : ${sucursales}" th:if="${sucursal.activo}">
+                            <td class="fw-bold text-dark" th:text="${sucursal.nombre}">Nombre de la Sede</td>
+                            <td th:text="${sucursal.direccion}">Dirección</td>
+                            <td th:text="${sucursal.telefono}">Teléfono</td>
+                            <td>
+                                <span th:if="${sucursal.tieneBiblioteca}" class="badge-biblioteca-si">SI (HABILITADO)</span>
+                                <span th:unless="${sucursal.tieneBiblioteca}" class="badge-biblioteca-no">NO (SOLO TIENDA)</span>
+                            </td>
                             <td class="text-end">
                                 <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarSucursal"
-                                        data-id="1" data-nombre="Sede Central" data-direccion="Av. Lima 123" 
-                                        data-telefono="999111222" data-biblioteca="true">
+                                        th:data-id="${sucursal.id}" 
+                                        th:data-nombre="${sucursal.nombre}" 
+                                        th:data-direccion="${sucursal.direccion}" 
+                                        th:data-telefono="${sucursal.telefono}" 
+                                        th:data-biblioteca="${sucursal.tieneBiblioteca}">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <button class="btn-action btn-eliminar-sucursal" 
-                                        data-id="1" data-nombre="Sede Central" data-tiene-elementos="true">
+                                <button class="btn-action btn-eliminar-sucursal text-danger" 
+                                        th:data-id="${sucursal.id}" 
+                                        th:data-nombre="${sucursal.nombre}" 
+                                        data-tiene-elementos="false">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
                         </tr>
                         
-                        <tr>
-                            <td class="fw-bold text-dark">Sucursal Norte</td>
-                            <td>Av. Norte 456</td>
-                            <td>999333444</td>
-                            <td><span class="badge-biblioteca-no">NO (SOLO TIENDA)</span></td>
-                            <td class="text-end">
-                                <button class="btn-action" data-bs-toggle="modal" data-bs-target="#modalEditarSucursal"
-                                        data-id="2" data-nombre="Sucursal Norte" data-direccion="Av. Norte 456" 
-                                        data-telefono="999333444" data-biblioteca="false">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn-action btn-eliminar-sucursal" 
-                                        data-id="2" data-nombre="Sucursal Norte" data-tiene-elementos="false">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
+                        <tr th:if="${#lists.isEmpty(sucursales)}">
+                            <td colspan="5" class="text-center text-muted py-4">No hay sucursales registradas o activas en el sistema.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="modalNuevaSucursal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -146,7 +153,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="modalEditarSucursal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -195,7 +201,6 @@
         </div>
     </div>
 
-
     <div class="modal fade" id="modalErrorIntegridad" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-center p-4">
@@ -215,7 +220,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="modalDesactivarSucursal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

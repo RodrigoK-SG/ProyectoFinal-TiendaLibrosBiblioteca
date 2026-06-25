@@ -4,45 +4,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalEditar = document.getElementById('modalEditarLibro');
     if (modalEditar) {
         modalEditar.addEventListener('show.bs.modal', function (event) {
-            // Botón que activó el modal (el ícono del lápiz)
+            
             const button = event.relatedTarget;
             
-            // Extraer info de los atributos data-*
+            // Extraer info
             const id = button.getAttribute('data-id');
             const isbn = button.getAttribute('data-isbn');
             const titulo = button.getAttribute('data-titulo');
             const formato = button.getAttribute('data-formato');
             const pVenta = button.getAttribute('data-pventa');
             const pAlquiler = button.getAttribute('data-palquiler');
+            const editorial = button.getAttribute('data-editorial');
             const activo = button.getAttribute('data-activo') === 'true';
 
-            // Actualizar los campos del formulario
+            // Actualizar campos
             modalEditar.querySelector('#editId').value = id;
             modalEditar.querySelector('#editIsbn').value = isbn;
             modalEditar.querySelector('#editTitulo').value = titulo;
-            modalEditar.querySelector('#editFormato').value = formato;
+            modalEditar.querySelector('#editFormato').value = formato; // Al ser un select, buscará el value exacto (TAPA_BLANDA, etc)
             modalEditar.querySelector('#editPrecioVenta').value = pVenta;
             modalEditar.querySelector('#editPrecioAlquiler').value = pAlquiler;
+            modalEditar.querySelector('#editEditorial').value = editorial;
             
             // Switch de estado
             const switchEstado = modalEditar.querySelector('#editSwitchEstado');
             const labelEstado = modalEditar.querySelector('#labelEstadoTexto');
             switchEstado.checked = activo;
-            labelEstado.textContent = activo ? 'Estado del Libro: ACTIVO' : 'Estado del Libro: INACTIVO';
-            labelEstado.className = activo ? 'form-check-label fw-bold text-success' : 'form-check-label fw-bold text-danger';
+            labelEstado.textContent = activo ? 'Estado: ACTIVO' : 'Estado: INACTIVO';
+            labelEstado.className = activo ? 'form-check-label fw-bold text-success ms-2 mt-2' : 'form-check-label fw-bold text-danger ms-2 mt-2';
         });
 
-        // Evento para cambiar el texto del switch dinámicamente cuando el usuario lo presiona
+        // Evento para cambiar el texto del switch
         const switchBtn = document.getElementById('editSwitchEstado');
         if(switchBtn) {
             switchBtn.addEventListener('change', function() {
                 const label = document.getElementById('labelEstadoTexto');
                 if(this.checked) {
-                    label.textContent = 'Estado del Libro: ACTIVO';
-                    label.className = 'form-check-label fw-bold text-success';
+                    label.textContent = 'Estado: ACTIVO';
+                    label.className = 'form-check-label fw-bold text-success ms-2 mt-2';
                 } else {
-                    label.textContent = 'Estado del Libro: INACTIVO';
-                    label.className = 'form-check-label fw-bold text-danger';
+                    label.textContent = 'Estado: INACTIVO';
+                    label.className = 'form-check-label fw-bold text-danger ms-2 mt-2';
                 }
             });
         }
@@ -56,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = button.getAttribute('data-id');
             const titulo = button.getAttribute('data-titulo');
 
-            // Insertar datos en el modal
             modalDesactivar.querySelector('#deleteId').value = id;
             modalDesactivar.querySelector('#deleteTitulo').textContent = titulo;
         });

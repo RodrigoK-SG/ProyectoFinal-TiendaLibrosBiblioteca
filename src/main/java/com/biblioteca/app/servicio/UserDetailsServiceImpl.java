@@ -1,6 +1,5 @@
 package com.biblioteca.app.servicio;
 
-import com.biblioteca.app.modelo.Rol;
 import com.biblioteca.app.modelo.Usuario;
 import com.biblioteca.app.repositorio.UsuarioRepositorio;
 import lombok.RequiredArgsConstructor;

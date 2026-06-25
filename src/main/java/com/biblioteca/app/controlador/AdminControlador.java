@@ -1,62 +1,94 @@
 package com.biblioteca.app.controlador;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.biblioteca.app.servicio.LibroServicio;
+import com.biblioteca.app.servicio.UsuarioServicio; // Asegúrate de tener este servicio
+import com.biblioteca.app.servicio.SucursalServicio;
+import com.biblioteca.app.servicio.EditorialServicio;
+import com.biblioteca.app.modelo.Libro;
+import com.biblioteca.app.modelo.enums.FormatoLibro;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminControlador {
 
-    // @Autowired
-    // private LibroService libroService;
-    // @Autowired
-    // private UsuarioService usuarioService;
-    // @Autowired
-    // private SucursalService sucursalService;
+    private final LibroServicio libroServicio;
+    private final UsuarioServicio usuarioServicio;
+    private final SucursalServicio sucursalServicio;
+    private final EditorialServicio editorialServicio;
 
-    @GetMapping
+    @GetMapping({"", "/"})
     public String verCatalogo(Model model) {
-        // Aquí cargarías los datos reales desde la base de datos
-        // model.addAttribute("libros", libroService.listarTodos());
-        // model.addAttribute("totalLibrosActivos", libroService.contarActivos());
-        // model.addAttribute("totalUsuarios", usuarioService.contarTodos());
-        // model.addAttribute("totalSucursales", sucursalService.contarTodas());
+        // Estadísticas Reales (Tus servicios deben tener un método count() o similar)
+        // Si no tienes métodos contarActivos(), puedes usar .size() de tus listas por ahora
+        model.addAttribute("totalLibrosActivos", libroServicio.listarTodosLosLibros().stream().filter(Libro::getActivo).count());
+        model.addAttribute("totalUsuarios", usuarioServicio.listarTodos().size()); 
+        model.addAttribute("totalSucursales", sucursalServicio.listarTodas().size());
         
-        return "administrador/catalogo"; // Retorna la vista HTML (Esto se mantiene igual)
-    }
-
-    @PostMapping("/nuevo")
-    public String registrarLibro(@RequestParam("isbn") String isbn,
-                                 @RequestParam("titulo") String titulo,
-                                 @RequestParam("formato") String formato,
-                                 @RequestParam("precioVenta") Double precioVenta,
-                                 @RequestParam("precioAlquiler") Double precioAlquiler,
-                                 @RequestParam(value = "portada", required = false) MultipartFile portada) {
-        // Lógica para guardar el nuevo libro y la imagen
-        return "redirect:/admin";
+        // Cargamos la lista dinámica de libros para la tabla
+        model.addAttribute("libros", libroServicio.listarTodosLosLibros());
+        
+        return "administrador/catalogo"; 
     }
 
     @PostMapping("/editar")
-    public String editarLibro(@RequestParam("id") Long id,
-                              @RequestParam("isbn") String isbn,
-                              @RequestParam("categoria") String categoria,
-                              @RequestParam("titulo") String titulo,
-                              @RequestParam("formato") String formato,
-                              @RequestParam("autor") String autor,
-                              @RequestParam("precioVenta") Double precioVenta,
-                              @RequestParam("editorial") String editorial,
-                              @RequestParam("precioAlquiler") Double precioAlquiler,
-                              @RequestParam(value = "activo", defaultValue = "false") boolean activo) {
-        // Lógica para actualizar los datos del libro existente
+    public String editarLibro(
+            @RequestParam("id") Integer id,
+            @RequestParam("titulo") String titulo,
+            @RequestParam("formato") String formato,
+            @RequestParam("precioVenta") BigDecimal precioVenta,
+            @RequestParam("precioAlquiler") BigDecimal precioAlquiler,
+            @RequestParam("editorial") String nombreEditorial,
+            @RequestParam(value = "activo", defaultValue = "false") boolean activo,
+            RedirectAttributes redirectAttributes) {
+        
+        try {
+            // Buscamos el libro existente
+            Libro libro = libroServicio.buscarPorId(id);
+            
+            // Actualizamos los campos permitidos
+            libro.setTitulo(titulo);
+            libro.setFormato(FormatoLibro.valueOf(formato));
+            libro.setPrecioVentaActual(precioVenta);
+            libro.setPrecioAlquilerActual(precioAlquiler);
+            libro.setActivo(activo);
+            
+            // Verificamos y asignamos la editorial si el admin la cambió
+            if (nombreEditorial != null && !nombreEditorial.trim().isEmpty()) {
+                libro.setEditorial(editorialServicio.obtenerOAsignarDefault(nombreEditorial));
+            }
+            
+            libroServicio.guardar(libro);
+            redirectAttributes.addFlashAttribute("exito", "Libro actualizado correctamente.");
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el libro: " + e.getMessage());
+        }
+        
         return "redirect:/admin";
     }
 
     @PostMapping("/desactivar")
-    public String desactivarLibro(@RequestParam("id") Long id) {
-        // Lógica para cambiar el estado de activo a false
-        // libroService.desactivar(id);
+    public String desactivarLibro(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            Libro libro = libroServicio.buscarPorId(id);
+            libro.setActivo(false); // Lo ocultamos del catálogo público
+            libroServicio.guardar(libro);
+            
+            redirectAttributes.addFlashAttribute("exito", "El libro ha sido desactivado del catálogo público.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Ocurrió un error al desactivar el libro.");
+        }
+        
         return "redirect:/admin";
     }
 }

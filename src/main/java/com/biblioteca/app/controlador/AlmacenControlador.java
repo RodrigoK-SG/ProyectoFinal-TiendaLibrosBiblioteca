@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.biblioteca.app.servicio.LibroServicio;
 import com.biblioteca.app.servicio.MovimientosInventarioServicio;
+import com.biblioteca.app.servicio.EditorialServicio;
 import com.biblioteca.app.servicio.InventarioVentaServicio;
 import com.biblioteca.app.servicio.SucursalServicio;
 import com.biblioteca.app.modelo.MovimientosInventario;
 import com.biblioteca.app.modelo.Sucursal;
+import com.biblioteca.app.modelo.enums.FormatoLibro;
 import com.biblioteca.app.modelo.Libro;
 
 import lombok.RequiredArgsConstructor;
@@ -28,98 +31,111 @@ public class AlmacenControlador {
     private final LibroServicio libroServicio;
     private final MovimientosInventarioServicio movimientosServicio;
     private final InventarioVentaServicio inventarioServicio;
-    
-    // Inyectamos el servicio de la Sucursal para solucionar el error 500
     private final SucursalServicio sucursalServicio; 
+    private final EditorialServicio editorialServicio; // AÑADIDO PARA LA EDITORIAL
 
     @GetMapping({"", "/"})
     public String inicioAlmacen() {
-        // Redirige automáticamente a la pestaña principal
         return "redirect:/almacen/movimientos";
     }
     
     // --- VISTA DE MOVIMIENTOS ---
     @GetMapping("/movimientos")
     public String verMovimientos(Model model) {
-        // Para el select del modal
-        model.addAttribute("libros", libroServicio.listarLibrosParaTienda());
+        // Listas para los selects del modal
+        model.addAttribute("libros", libroServicio.listarTodosLosLibros());
+        model.addAttribute("sucursales", sucursalServicio.listarTodas()); 
         
-        // Para el formulario vacío
-        model.addAttribute("nuevoMovimiento", new MovimientosInventario());
+        // Evitar sobreescribir si ya existe un error en el modal
+        if (!model.containsAttribute("nuevoMovimiento")) {
+            model.addAttribute("nuevoMovimiento", new MovimientosInventario());
+        }
         
-        // ¡AQUÍ ESTÁ LA MAGIA PARA LLENAR LA TABLA!
         model.addAttribute("listaMovimientos", movimientosServicio.listarTodosLosMovimientos());
         
-        // Retornamos apuntando a la nueva carpeta
         return "almacenero/movimientos";
     }
 
     // --- GUARDAR MOVIMIENTO DESDE EL MODAL ---
+ // --- GUARDAR MOVIMIENTO DESDE EL MODAL ---
     @PostMapping("/movimientos/registrar")
     public String registrarMovimiento(
             @ModelAttribute("nuevoMovimiento") MovimientosInventario movimiento,
-            @RequestParam(value = "nuevoIsbn", required = false) String nuevoIsbn) {
+            @RequestParam("sucursalId") Integer sucursalId,
+            @RequestParam(value = "esNuevoLibro", defaultValue = "false") boolean esNuevoLibro,
+            @RequestParam(value = "nuevoIsbn", required = false) String nuevoIsbn,
+            @RequestParam(value = "nuevoTitulo", required = false) String nuevoTitulo,
+            @RequestParam(value = "nuevaImagen", required = false) String nuevaImagen,
+            @RequestParam(value = "nuevasPaginas", required = false, defaultValue = "100") Integer nuevasPaginas,
+            @RequestParam(value = "nuevaEditorial", required = false) String nuevaEditorial, 
+            @RequestParam(value = "formato", required = false) String formato, // <-- CAPTURAMOS EL FORMATO
+            @RequestParam(value = "nuevoPrecio", required = false, defaultValue = "0.00") BigDecimal nuevoPrecio, // <-- CAPTURAMOS EL PRECIO
+            RedirectAttributes redirectAttributes) { 
         
-        // 1. Asignamos la Sucursal
-        Sucursal sucursalCentral = sucursalServicio.buscarPorId(1);
-        movimiento.setSucursal(sucursalCentral); 
+        try {
+            // 1. Asignamos la Sucursal seleccionada en el modal
+            Sucursal sucursal = sucursalServicio.buscarPorId(sucursalId);
+            movimiento.setSucursal(sucursal); 
 
-        // Convertimos a String por seguridad (en caso de que tipoMovimiento sea un Enum)
-        String tipoStr = String.valueOf(movimiento.getTipoMovimiento());
-
-        // 2. Lógica para Entrada vs Salida
-        if ("INGRESO_PROVEEDOR".equals(tipoStr)) {
-            
-            // Es ENTRADA: Validamos y creamos el libro borrador
-            if (nuevoIsbn != null && !nuevoIsbn.trim().isEmpty()) {
-                Libro libroBorrador = new Libro();
-                libroBorrador.setIsbn(nuevoIsbn);
-                libroBorrador.setTitulo("Libro Nuevo - Faltan Datos (" + nuevoIsbn + ")");
-                libroBorrador.setPrecioVentaActual(new BigDecimal("1.00")); 
-                libroBorrador.setActivo(true);
+            // 2. Lógica para Libros Nuevos vs Existentes
+            if (esNuevoLibro && nuevoIsbn != null && !nuevoIsbn.trim().isEmpty()) {
                 
-                // Guardamos el libro real en la BD y lo asignamos al movimiento
-                Libro libroGuardado = libroServicio.guardar(libroBorrador);
+                Libro nuevoLibro = new Libro();
+                nuevoLibro.setIsbn(nuevoIsbn);
+                nuevoLibro.setTitulo(nuevoTitulo != null && !nuevoTitulo.isEmpty() ? nuevoTitulo : "Libro Autogenerado (" + nuevoIsbn + ")");
+                nuevoLibro.setImagenPortada(nuevaImagen);
+                // Aseguramos que las páginas siempre sean mayor a 0 para que la BD no explote
+                Integer paginasValidas = (nuevasPaginas != null && nuevasPaginas > 0) ? nuevasPaginas : 1;
+                nuevoLibro.setPaginas(paginasValidas);                
+                // ASIGNAMOS EL PRECIO Y FORMATO QUE VIENE DEL HTML
+                nuevoLibro.setPrecioVentaActual(nuevoPrecio); 
+                nuevoLibro.setFormato(FormatoLibro.valueOf(formato != null ? formato : "TAPA_BLANDA"));                
+                nuevoLibro.setActivo(true);
+                nuevoLibro.setEditorial(editorialServicio.obtenerOAsignarDefault(nuevaEditorial));
+                
+                Libro libroGuardado = libroServicio.guardar(nuevoLibro);
                 movimiento.setLibro(libroGuardado); 
+                
             } else {
-                throw new RuntimeException("Error: Debe ingresar un ISBN para registrar la entrada.");
+                if (movimiento.getLibro() != null && movimiento.getLibro().getId() != null) {
+                    Libro libroExistente = libroServicio.buscarPorId(movimiento.getLibro().getId());
+                    movimiento.setLibro(libroExistente);
+                } else {
+                    throw new RuntimeException("Error: Debe seleccionar un libro válido de la lista.");
+                }
             }
-            
-        } else {
-            
-            // Es SALIDA: Reemplazamos el libro "fantasma" del formulario por el real de la BD
-            if (movimiento.getLibro() != null && movimiento.getLibro().getId() != null) {
-                Libro libroExistente = libroServicio.buscarPorId(movimiento.getLibro().getId());
-                movimiento.setLibro(libroExistente);
-            } else {
-                throw new RuntimeException("Error: Debe seleccionar un libro válido de la lista.");
-            }
-        }
 
-        // 3. Guardamos el movimiento (ahora sí, con entidades reales)
-        movimientosServicio.registrarMovimiento(movimiento);
+            // 3. Guardamos el movimiento
+            movimientosServicio.registrarMovimiento(movimiento);
+            redirectAttributes.addFlashAttribute("exito", "Movimiento de inventario registrado correctamente.");
+
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("nuevoMovimiento", movimiento);
+        }
         
-        // El redirect se mantiene igual porque es una URL, no un archivo HTML
         return "redirect:/almacen/movimientos";
     }
 
     // --- VISTA DE STOCK ---
+ // ... Todo lo de arriba queda igual ...
+
+    // --- VISTA DE STOCK ---
     @GetMapping("/stock")
     public String verStock(Model model) {
-        model.addAttribute("libros", libroServicio.listarTodosLosLibros());
-        
-        // Retornamos apuntando a la nueva carpeta
+        // AQUÍ EL CAMBIO: Llamamos al servicio de inventario, no al de libros
+        model.addAttribute("listaStock", inventarioServicio.listarStockGeneral());
         return "almacenero/stock";
     }
 
+    // ... Todo lo de abajo queda igual ...
+
     // --- VISTA DE ALERTAS ---
+ // --- VISTA DE ALERTAS ---
     @GetMapping("/alertar")
     public String verAlertas(Model model) {
-        // NOTA: Por ahora la vista mostrará los datos estáticos del HTML.
-        // Cuando estés listo para hacerlo dinámico, puedes descomentar y usar una línea como esta:
-        // model.addAttribute("librosEnAlerta", inventarioServicio.listarAlertasStock());
-        
-        // Retornamos apuntando a la vista "alertas.html" dentro de la carpeta "almacenero"
+        // Mandamos la lista filtrada a la vista
+        model.addAttribute("listaAlertas", inventarioServicio.listarAlertasStock());
         return "almacenero/alertar";
     }
 }

@@ -1,5 +1,9 @@
 package com.biblioteca.app.modelo;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.biblioteca.app.modelo.enums.TipoMovimiento;
 import com.biblioteca.app.modelo.enums.TipoReferencia;
 import jakarta.persistence.*;
@@ -39,4 +43,8 @@ public class MovimientosInventario {
 	private Integer cantidad;
 	
 	private String descripcion;
+	
+	@CreationTimestamp
+	@Column(name = "FECHA_MOVIMIENTO", updatable = false)
+	private LocalDateTime fechaMovimiento;
 }

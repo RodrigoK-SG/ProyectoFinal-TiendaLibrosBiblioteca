@@ -45,11 +45,6 @@ public class LibroServicio {
             libro.setActivo(true);
         }
         
-        //Regla 2:El precio tiene que ser mayor que 0 para que se logico
-        if (libro.getPrecioVentaActual().doubleValue() <= 0) {
-            throw new RuntimeException("El precio de venta debe ser mayor a 0.");
-        }
-
         return libroRepository.save(libro);
     }
 
