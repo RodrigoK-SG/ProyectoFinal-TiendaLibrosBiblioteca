@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -62,6 +63,33 @@ public class CarritoServicio {
             // Borramos todos los detalles amarrados a este carrito
             // (Aquí podrías crear un método en el repo para borrar por CarritoId)
             carritoRepository.delete(carrito); 
+        });
+    }
+    
+    @Transactional(readOnly = true)
+    public List<CarritoDetalle> obtenerCarritoCompleto(Integer clienteId) {
+        // 1. Buscamos el carrito del cliente
+        Optional<Carrito> carrito = carritoRepository.findByClienteId(clienteId);
+        if (carrito.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+        // 2. Buscamos todos los detalles asociados a ese carritoId
+        return detalleRepository.findByCarritoId(carrito.get().getId());
+    }
+    
+    @Transactional
+    public void eliminarLibroDelCarrito(Integer clienteId, Integer libroId) {
+        // 1. Buscamos el carrito del cliente
+        carritoRepository.findByClienteId(clienteId).ifPresent(carrito -> {
+            // 2. Armamos la llave compuesta que usa tu tabla intermedia
+            CarritoDetalleId detalleId = new CarritoDetalleId();
+            detalleId.setCarritoId(carrito.getId());
+            detalleId.setLibroId(libroId);
+            
+            // 3. Si existe el detalle con esa llave, lo eliminamos permanentemente
+            if (detalleRepository.existsById(detalleId)) {
+                detalleRepository.deleteById(detalleId);
+            }
         });
     }
 }

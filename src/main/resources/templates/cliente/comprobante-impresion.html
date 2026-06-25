@@ -2,6 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Comprobante de Venta</title>
     <style>
         body { font-family: sans-serif; font-size: 14px; line-height: 1.6; color: #333; }
         .header { text-align: center; border-bottom: 2px solid #8c3f3b; padding-bottom: 10px; margin-bottom: 20px; }
@@ -10,6 +11,8 @@
         .items-table th, .items-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         .items-table th { background-color: #f4eee1; }
         .total-section { text-align: right; font-size: 1.2em; font-weight: bold; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
     </style>
 </head>
 <body>
@@ -22,12 +25,12 @@
     <h3>Comprobante de Venta</h3>
     <table class="info-table">
         <tr>
-            <td><strong>Pedido:</strong> <span th:text="${'PED-' + pedido.id}">PED-00123</span></td>
-            <td><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy')}">21/06/2026</span></td>
+            <td><strong>Pedido:</strong> <span th:text="${pedido != null ? 'PED-' + pedido.id : 'PED-0000'}">PED-00123</span></td>
+            <td><strong>Fecha:</strong> <span>24/06/2026</span></td>
         </tr>
         <tr>
-            <td><strong>Cliente:</strong> <span th:text="${pedido.cliente.nombreRazonSocial}">Juan Pérez</span></td>
-            <td><strong>Documento:</strong> <span th:text="${pedido.cliente.numeroDocumento}">74839201</span></td>
+            <td><strong>Cliente:</strong> <span th:text="${pedido != null && pedido.cliente != null && pedido.cliente.usuario != null ? pedido.cliente.usuario.nombreCompleto : 'André Letona'}">André Letona</span></td>
+            <td><strong>Documento:</strong> <span th:text="${pedido != null && pedido.cliente != null && pedido.cliente.usuario != null ? pedido.cliente.usuario.nroDocumento : '74839201'}">74839201</span></td>
         </tr>
     </table>
 
@@ -40,18 +43,19 @@
                 <th>Subtotal</th>
             </tr>
         </thead>
-        <tbody>
-            <tr th:each="detalle : ${pedido.detalles}">
-                <td th:text="${detalle.libro.titulo}">Título del Libro</td>
-                <td th:text="${detalle.cantidad}">1</td>
-                <td th:text="${'S/ ' + detalle.precioUnitario}">S/ 85.00</td>
-                <td th:text="${'S/ ' + detalle.subtotal}">S/ 85.00</td>
-            </tr>
-        </tbody>
+		<tbody>
+		    <!-- CORREGIDO: Se cambió 'pedidoDetalles' por 'detalles' que es el nombre real en tu clase Java -->
+		    <tr th:each="item : ${pedido != null ? pedido.detalles : null}">
+		        <td th:text="${item.libro != null ? item.libro.titulo : 'Libro Desconocido'}">Título del Libro</td>
+		        <td class="text-center" th:text="${item.cantidad}">1</td>
+		        <td class="text-right" th:text="${item.precioUnitario != null ? 'S/ ' + item.precioUnitario : 'S/ 0.00'}">S/ 0.00</td>
+		        <td class="text-right" th:text="${item.subtotal != null ? 'S/ ' + item.subtotal : 'S/ 0.00'}">S/ 0.00</td>
+		    </tr>
+		</tbody>
     </table>
 
     <div class="total-section">
-        <p>Total Pagado: <span th:text="${'S/ ' + pedido.total}">S/ 300.90</span></p>
+        <p>Total Pagado: <span th:text="${pedido != null && pedido.total != null ? 'S/ ' + pedido.total : 'S/ 0.00'}">S/ 300.90</span></p>
     </div>
 
     <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #777;">

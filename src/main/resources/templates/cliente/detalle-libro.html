@@ -20,36 +20,37 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
-                <form th:action="@{/catalogo/detalle/reseña/guardar}" method="POST">
-                    <!-- SE CORRIGIÓ: Agregado el contenedor modal-body estructurado -->
-                    <div class="modal-body">
-                        
-                        <div class="mb-3 text-center">
-                            <p class="text-muted small mb-2">¿Qué te pareció el libro? Califícalo del 1 al 5.</p>
-                            
-                            <!-- Contenedor de estrellas interactivas -->
-                            <div class="estrellas-rating fs-2 d-flex justify-content-center gap-2" style="cursor: pointer;">
-                                <i class="bi bi-star-fill estrella-voto" data-value="1"></i>
-                                <i class="bi bi-star-fill estrella-voto" data-value="2"></i>
-                                <i class="bi bi-star-fill estrella-voto" data-value="3"></i>
-                                <i class="bi bi-star-fill estrella-voto" data-value="4"></i>
-                                <i class="bi bi-star-fill estrella-voto" data-value="5"></i>
-                            </div>
-                            
-                            <input type="hidden" id="calificacionInput" name="calificacion" value="0" required>
-                        </div>
+				<form th:action="@{/catalogo/libro/resena/agregar}" method="POST">
+				                    <div class="modal-body">
+				                        <!-- SE AGREGA EL ID DEL LIBRO AQUÍ -->
+				                        <input type="hidden" name="libroId" th:value="${libro.id}" />
+				                        
+				                        <div class="mb-3 text-center">
+				                            <p class="text-muted small mb-2">¿Qué te pareció el libro? Califícalo del 1 al 5.</p>
+				                            
+				                            <!-- Contenedor de estrellas interactivas -->
+				                            <div class="estrellas-rating fs-2 d-flex justify-content-center gap-2" style="cursor: pointer;">
+				                                <i class="bi bi-star-fill estrella-voto" data-value="1"></i>
+				                                <i class="bi bi-star-fill estrella-voto" data-value="2"></i>
+				                                <i class="bi bi-star-fill estrella-voto" data-value="3"></i>
+				                                <i class="bi bi-star-fill estrella-voto" data-value="4"></i>
+				                                <i class="bi bi-star-fill estrella-voto" data-value="5"></i>
+				                            </div>
+				                            
+				                            <input type="hidden" id="calificacionInput" name="calificacion" value="0" required>
+				                        </div>
 
-                        <div class="mb-3">
-                            <textarea name="comentario" class="form-control bg-light p-3" rows="4" placeholder="Escribe tu opinión aquí..." style="border-radius: 10px; font-size: 0.9rem;" required></textarea>
-                        </div>
-                        
-                    </div>
-                    
-                    <div class="modal-footer border-0 pt-0">
-                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" style="border-radius: 8px;">Cancelar</button>
-                        <button type="submit" class="btn text-white btn-sm px-3" style="background-color: #c86b66; border-radius: 8px;">Publicar Reseña</button>
-                    </div>
-                </form>
+				                        <div class="mb-3">
+				                            <textarea name="comentario" class="form-control bg-light p-3" rows="4" placeholder="Escribe tu opinión aquí..." style="border-radius: 10px; font-size: 0.9rem;" required></textarea>
+				                        </div>
+				                        
+				                    </div>
+				                    
+				                    <div class="modal-footer border-0 pt-0">
+				                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" style="border-radius: 8px;">Cancelar</button>
+				                        <button type="submit" class="btn text-white btn-sm px-3" style="background-color: #c86b66; border-radius: 8px;">Publicar Reseña</button>
+				                    </div>
+				                </form>
                 
             </div>
         </div>
@@ -130,11 +131,15 @@
                 </div>
 
                 <div class="d-grid">
-                    <button class="btn text-white fw-bold py-3 shadow-sm btn-add-cart-detalle" 
-                            th:data-id="${libro.id}" 
-                            style="background-color: #c86b66;">
-                        <i class="bi bi-cart-plus me-2 fs-5"></i>Añadir al Carrito
-                    </button>
+					<form th:action="@{/catalogo/carrito/agregar}" method="POST" class="mt-4">
+					    <input type="hidden" name="libroId" th:value="${libro.id}" />
+					    
+					    <input type="hidden" name="cantidad" value="1" />
+					    
+					    <button type="submit" class="btn btn-lg text-white fw-bold w-100 py-3" style="background-color: #c86b66; border-radius: 8px; border: none;">
+					        <i class="bi bi-cart-plus me-2"></i>Añadir al Carrito
+					    </button>
+					</form>
                 </div>
             </div>
         </div>
@@ -148,31 +153,34 @@
             </button>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 g-3">
-            <div class="col">
-                <div class="card p-3 border-0 shadow-sm h-100 bg-white">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="text-warning small"><i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, 5)}"></i></div>
-                        <span class="text-muted small">20 Jun 2026</span>
-                    </div>
-                    <h6 class="fw-bold mb-1">Excelente libro</h6>
-                    <p class="small text-muted mb-3">Me encantó de principio a fin. El formato tapa dura es excelente.</p>
-                    <div class="d-flex align-items-center gap-2 small fw-bold"><div class="rounded-circle avatar-resena px-2">JU</div> Juan Pérez</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card p-3 border-0 shadow-sm h-100 bg-white">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="text-warning small"><i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, 4)}"></i></div>
-                        <span class="text-muted small">18 Jun 2026</span>
-                    </div>
-                    <h6 class="fw-bold mb-1">Muy recomendado</h6>
-                    <p class="small text-muted mb-3">Una perspectiva bastante sólida sobre la narrativa de ciencia ficción.</p>
-                    <div class="d-flex align-items-center gap-2 small fw-bold"><div class="rounded-circle avatar-resena px-2">CA</div> Carlos M.</div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- SECCIÓN DE RESEÑAS DINÁMICAS -->
+		        <div class="row row-cols-1 row-cols-md-2 g-3">
+		            <!-- Si no hay reseñas guardadas, muestra un mensaje amigable -->
+		            <div class="col-12 text-center py-3 text-muted small" th:if="${resenas == null || resenas.isEmpty()}">
+		                <p><i class="bi bi-chat-left-text me-2"></i>Nadie ha escrito una reseña todavía. ¡Sé el primero!</p>
+		            </div>
+
+		            <!-- Bucle para iterar las reseñas de la base de datos -->
+		            <div class="col" th:each="res : ${resenas}">
+		                <div class="card p-3 border-0 shadow-sm h-100 bg-white" style="border-radius: 12px;">
+		                    <div class="d-flex justify-content-between align-items-center mb-2">
+		                        <!-- Pinta de forma exacta las estrellas según el número calificado (1 al 5) -->
+		                        <div class="text-warning small">
+		                            <i class="bi bi-star-fill" th:each="num : ${#numbers.sequence(1, res.calificacion)}"></i>
+		                        </div>
+		                        <!-- Puedes usar una fecha genérica o mapear un campo si tu amigo decide agregarlo más adelante -->
+		                        <span class="text-muted small">Reciente</span>
+		                    </div>
+		                    <p class="small text-dark mb-3" th:text="${res.comentario}">Texto de la opinión real...</p>
+		                    <div class="d-flex align-items-center gap-2 small fw-bold">
+		                        <div class="rounded-circle avatar-resena px-2 bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-size: 0.8rem;">
+		                            <i class="bi bi-person-fill"></i>
+		                        </div> 
+		                        <span th:text="${res.cliente.usuario.nombreCompleto}">Nombre del Lector</span>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
 
     <!-- FOOTER COMPONENTE -->
     <div th:replace="~{componentes/componente :: footer}"></div>

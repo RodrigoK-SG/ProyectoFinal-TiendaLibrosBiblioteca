@@ -27,6 +27,9 @@ public class Usuario {
 
     @Column(name = "CREADO_EN", updatable = false)
     private LocalDateTime creadoEn = LocalDateTime.now();
+    
+    @Column(name = "NRO_DOCUMENTO", length = 15)
+    private String nroDocumento;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

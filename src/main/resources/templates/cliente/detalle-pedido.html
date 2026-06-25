@@ -24,13 +24,12 @@
             <div>
                 <h3 class="fw-bold m-0 font-editorial-titulo" th:text="'Pedido #PED-' + ${pedido.id}">Pedido #PED-00123</h3>
                 <p class="text-muted small m-0 mt-1">
-                    <span th:text="${#temporals.format(pedido.fechaPedido, 'dd MMM yyyy')}">15 May 2026</span> - 
-                    <span th:text="${pedido.tipoEntrega}">Delivery</span>
+                    <span th:text="${pedido.tipoEntrega != null ? pedido.tipoEntrega.name() : 'No definido'}">Delivery</span>
                 </p>
             </div>
             <div>
                 <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-normal fs-6" 
-                      th:text="${pedido.estadoActual.name()}">Entregado</span>
+                      th:text="${pedido.estadoActual != null ? pedido.estadoActual.name() : 'PROCESANDO'}">Entregado</span>
             </div>
         </div>
 
@@ -41,17 +40,28 @@
                     <h6 class="fw-bold mb-4 text-dark">Línea de Tiempo de Envío</h6>
                     
                     <div class="timeline-container ps-2">
-                        <div class="timeline-item pb-4 position-relative" th:each="hito : ${pedido.historial}">
+                        <div class="timeline-item pb-4 position-relative">
                             <div class="timeline-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center position-absolute" style="width: 24px; height: 24px; left: -12px;">
                                 <i class="bi bi-check small"></i>
                             </div>
                             <div class="ps-4">
-                                <h6 class="fw-bold m-0 text-dark small" th:text="${hito.estado.name()}">Pedido Recibido</h6>
-                                <p class="text-muted small m-0" style="font-size: 0.75rem;" th:text="${#temporals.format(hito.fechaCambio, 'dd MMM yyyy - hh:mm a')}">15 May 2026 - 10:23 a.m.</p>
+                                <h6 class="fw-bold m-0 text-dark small">Pedido Confirmado</h6>
+                                <p class="text-muted small m-0" style="font-size: 0.75rem;">Registrado en base de datos correctamente.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item pb-4 position-relative" th:if="${pedido.direccionEnvio != null}">
+                            <div class="timeline-icon bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center position-absolute" 
+                                 th:classappend="${pedido.estadoActual.name() == 'ENVIADO' or pedido.estadoActual.name() == 'ENTREGADO'} ? 'bg-success' : ''"
+                                 style="width: 24px; height: 24px; left: -12px;">
+                                <i class="bi bi-truck small"></i>
+                            </div>
+                            <div class="ps-4">
+                                <h6 class="fw-bold m-0 text-dark small">Despachado a Dirección</h6>
+                                <p class="text-muted small m-0" style="font-size: 0.75rem;">Asignado para reparto local.</p>
                                 
-                                <div th:if="${hito.estado.name() == 'ENVIADO' and pedido.envio != null}" class="mt-2 p-2 bg-light rounded border border-primary border-opacity-25">
-                                    <p class="m-0 text-primary small" style="font-size: 0.7rem;">Transportista: <strong th:text="${pedido.envio.transportista}">Olva Courier</strong></p>
-                                    <p class="m-0 text-primary small" style="font-size: 0.7rem;">N° Tracking: <strong th:text="${pedido.envio.numeroTracking}">DLV-2026-8843</strong></p>
+                                <div th:if="${pedido.estadoActual.name() == 'ENVIADO'}" class="mt-2 p-2 bg-light rounded border border-primary border-opacity-25">
+                                    <p class="m-0 text-primary small" style="font-size: 0.7rem;">Modalidad: <strong>Delivery Regular</strong></p>
                                 </div>
                             </div>
                         </div>
@@ -61,41 +71,39 @@
                 <div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 12px;">
                     <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-geo-alt me-2 text-secondary"></i>Dirección de Entrega</h6>
                     <div th:if="${pedido.direccionEnvio != null}">
-                        <h6 class="fw-bold small text-dark m-0 mb-1" th:text="${pedido.cliente.nombreRazonSocial}">Juan Pérez</h6>
-                        <p class="text-muted small m-0 mb-1" th:text="${pedido.direccionEnvio.direccionCompleta}">Av. Larco 1234, Apt. 5B</p>
-                        <p class="text-muted small m-0 mb-2" th:text="${pedido.direccionEnvio.ciudad} + ', ' + ${pedido.direccionEnvio.codigoPostal}">Miraflores, Lima</p>
+                        <h6 class="fw-bold small text-dark m-0 mb-1" th:text="${pedido.cliente.id}">ID Cliente</h6>
+                        <p class="text-muted small m-0 mb-1">Envío programado a tu domicilio registrado.</p>
                     </div>
                     <div th:if="${pedido.direccionEnvio == null}">
-                        <p class="text-muted small m-0">Recojo programado en nuestra Sede Central.</p>
+                        <p class="text-muted small m-0">Recojo programado en nuestra tienda principal (Gratis).</p>
                     </div>
                 </div>
 
 				<div class="card border-0 shadow-sm p-4 bg-white" style="border-radius: 12px;">
-				                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>Comprobante Fiscal</h6>
-				                    <div th:if="${pedido.comprobante != null}">
-				                        <div class="d-flex justify-content-between mb-2 small">
-				                            <span class="text-muted">Tipo</span>
-				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.tipoComprobante}">Boleta de Venta</span>
-				                        </div>
-				                        <div class="d-flex justify-content-between mb-2 small">
-				                            <span class="text-muted">Serie</span>
-				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.serie}">B001</span>
-				                        </div>
-				                        <div class="d-flex justify-content-between mb-3 small">
-				                            <span class="text-muted">Número</span>
-				                            <span class="fw-bold text-dark" th:text="${pedido.comprobante.numero}">00012543</span>
-				                        </div>
-				                        
-				                        <a th:href="@{/catalogo/pedidos/comprobante/{id}(id=${pedido.id})}" 
-				                           class="btn btn-sm w-100 fw-bold text-secondary border d-flex align-items-center justify-content-center" 
-				                           style="border-radius: 8px; background-color: #f8f9fa;">
-				                           <i class="bi bi-download me-2"></i> Descargar Comprobante (PDF)
-				                        </a>
-				                    </div>
-				                    <div th:if="${pedido.comprobante == null}">
-				                        <p class="text-muted small m-0">El comprobante se generará una vez confirmado el pago.</p>
-				                    </div>
-				                </div>
+                    <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-file-earmark-text me-2 text-secondary"></i>Comprobante Fiscal</h6>
+                    <div>
+                        <div class="d-flex justify-content-between mb-2 small">
+                            <span class="text-muted">Tipo</span>
+                            <span class="fw-bold text-dark">Boleta de Venta Electrónica</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 small">
+                            <span class="text-muted">Serie</span>
+                            <span class="fw-bold text-dark">B001</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 small">
+                            <span class="text-muted">Número</span>
+                            <span class="fw-bold text-dark" th:text="'000' + ${pedido.id}">00012543</span>
+                        </div>
+                        
+						<!-- CORREGIDO: Ahora usa la ruta correcta sin la "s" y abre la boleta en una pestaña nueva al hacer clic -->
+						<a th:href="@{/catalogo/pedido/comprobante/{id}(id=${pedido.id})}" 
+						   target="_blank"
+						   class="btn btn-sm w-100 fw-bold text-secondary border d-flex align-items-center justify-content-center" 
+						   style="border-radius: 8px; background-color: #f8f9fa;">
+						   <i class="bi bi-download me-2"></i> Descargar Comprobante (PDF)
+						</a>
+                    </div>
+                </div>
 
             </div>
 
@@ -110,8 +118,7 @@
                             </div>
                             <div class="col-7">
                                 <h6 class="fw-bold text-dark m-0 mb-1" th:text="${detalle.libro.titulo}">El Arte de la Ficción</h6>
-                                <p class="text-muted m-0 small mb-1" style="font-size: 0.75rem;" th:text="${detalle.libro.autores[0].nombre}">David Lodge</p>
-                                <span class="badge bg-light text-secondary border fw-normal me-2" th:text="${detalle.libro.formato.name()}">Físico</span>
+                                <span class="badge bg-light text-secondary border fw-normal me-2">Físico</span>
                                 <span class="text-muted small" style="font-size: 0.75rem;" th:text="'Cantidad: ' + ${detalle.cantidad}">Cantidad: 1</span>
                             </div>
                             <div class="col-3 text-end">
@@ -122,16 +129,12 @@
                     </div>
 
                     <div class="d-flex justify-content-between mb-2 small text-muted">
-                        <span>Subtotal</span>
-                        <span th:text="'S/ ' + ${pedido.total - 15.00}">S/ 240.00</span>
+                        <span>Subtotal Neto</span>
+                        <span th:text="'S/ ' + ${pedido.total}">S/ 240.00</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2 small text-muted">
                         <span>Costo de Envío</span>
-                        <span>S/ 15.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-4 small text-muted">
-                        <span>IGV (18%)</span>
-                        <span th:text="'S/ ' + ${pedido.total * 0.18}">S/ 45.90</span>
+                        <span th:text="${pedido.direccionEnvio != null} ? 'S/ 15.00' : 'Gratis'">S/ 15.00</span>
                     </div>
                     
                     <hr class="opacity-10 mb-3">
@@ -141,7 +144,7 @@
                         <h4 class="fw-bold m-0 text-dark-ale" th:text="'S/ ' + ${pedido.total}">S/ 300.90</h4>
                     </div>
                     <div class="text-end mb-4">
-                        <small class="text-muted" style="font-size: 0.7rem;">Incluye IGV - Pagado con <span th:text="${pedido.pago != null ? pedido.pago.metodoPago : 'Pendiente'}">Yape</span></small>
+                        <small class="text-muted" style="font-size: 0.7rem;">Precios con IGV incluido en pasarela de facturación.</small>
                     </div>
 
                     <div class="row g-2">

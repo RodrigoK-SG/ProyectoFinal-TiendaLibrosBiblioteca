@@ -66,11 +66,15 @@
                                     </div>
                                 </div>
 								<div class="d-grid gap-1 mt-auto">
-								    <button class="btn btn-sm text-white fw-bold btn-add-cart-detalle" 
-								            th:data-id="${libro.id}" style="background-color: #c86b66;">
-								        Añadir al Carrito
-								    </button>
-								    <a th:href="@{/catalogo/detalle/{id}(id=${libro.id})}" class="btn btn-outline-secondary btn-sm">Ver detalle</a>
+									<form th:action="@{/catalogo/carrito/agregar}" method="POST">
+									    <input type="hidden" name="libroId" th:value="${libro.id}" />
+									    <input type="hidden" name="cantidad" value="1" />
+									    
+									    <button type="submit" class="btn btn-sm text-white fw-bold w-100" style="background-color: #c86b66;">
+									        Añadir al Carrito
+									    </button>
+									</form>
+								    <a th:href="@{/catalogo/libro/{slug}(slug=${libro.slug})}" class="btn btn-outline-secondary btn-sm">Ver detalle</a>
 								</div>
                             </div>
                         </div>
