@@ -28,20 +28,27 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Desactivado por ahora para facilitar el desarrollo
             
             .authorizeHttpRequests(auth -> auth
-                // Rutas PÚBLICAS (Todos pueden entrar)
-                .requestMatchers("/error", "/", "/catalogo", "/catalogo/detalle/**", "/catalogo/vista-login", "/registro").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll()
-                
-                // Rutas PROTEGIDAS POR ROL (Usamos hasAuthority porque no tienen el prefijo ROLE_)
-                .requestMatchers("/admin/**").hasAuthority("ADMINISTRADOR")
-                .requestMatchers("/vendedor/**").hasAuthority("VENDEDOR")
-                .requestMatchers("/bibliotecario/**").hasAuthority("BIBLIOTECARIO")
-                .requestMatchers("/almacen/**").hasAuthority("ALMACENERO")
-                .requestMatchers("/catalogo/perfil/**", "/catalogo/checkout/**").hasAnyAuthority("CLIENTE_WEB", "ADMINISTRADOR")
-                
-                // Cualquier otra ruta requiere estar logueado
-                .anyRequest().authenticated()
-            )
+            	    // 1. Rutas PÚBLICAS (Añadimos todas las estáticas que consolidamos)
+            	    .requestMatchers("/error", "/", "/catalogo", "/catalogo/libro/**", 
+            	                     "/catalogo/vista-login", "/registro",
+            	                     "/catalogo/historia", "/catalogo/sucursales", "/catalogo/contacto", 
+            	                     "/catalogo/blog", "/catalogo/reglamento", "/catalogo/terminos", 
+            	                     "/catalogo/reclamaciones", "/catalogo/envio", "/catalogo/devolucion").permitAll()
+            	    
+            	    .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll()
+            	    
+            	    // 2. Rutas PROTEGIDAS POR ROL
+            	    .requestMatchers("/admin/**").hasAuthority("ADMINISTRADOR")
+            	    .requestMatchers("/vendedor/**").hasAuthority("VENDEDOR")
+            	    .requestMatchers("/bibliotecario/**").hasAuthority("BIBLIOTECARIO")
+            	    .requestMatchers("/almacen/**").hasAuthority("ALMACENERO")
+            	    
+            	    // 3. Rutas de Cliente (Asegúrate que coincidan con tu controlador: /pagos o /checkout)
+            	    .requestMatchers("/catalogo/perfil/**", "/catalogo/pagos").hasAnyAuthority("CLIENTE_WEB", "ADMINISTRADOR")
+            	    
+            	    // Cualquier otra ruta requiere estar logueado
+            	    .anyRequest().authenticated()
+            	)
             .formLogin(form -> form
                 .loginPage("/catalogo/vista-login") // La URL donde está tu HTML de login
                 .loginProcessingUrl("/login") // La ruta que procesa el <form th:action="@{/login}"> (Spring lo hace automático)

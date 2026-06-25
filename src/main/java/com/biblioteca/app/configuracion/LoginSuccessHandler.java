@@ -26,15 +26,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 redirectUrl = "/admin";
                 break;
             } else if (roleName.equals("VENDEDOR")) {
-                redirectUrl = "/vendedor";
+                redirectUrl = "vendedor/caja";
                 break;
             } else if (roleName.equals("BIBLIOTECARIO")) {
-                redirectUrl = "/bibliotecario";
+                redirectUrl = "bibliotecario/prestamos";
                 break;
             } else if (roleName.equals("ALMACENERO")) {
                 redirectUrl = "/almacen";
                 break;
-            } else if (roleName.equals("CLIENTE_WEB")) {
+            } else if (roleName.equals("CLIENTE_WEB")) { 
                 redirectUrl = "/catalogo/perfil"; 
                 break;
             }

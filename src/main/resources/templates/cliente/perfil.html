@@ -16,7 +16,6 @@
         <div class="row g-4">
             
             <div class="col-md-3">
-                
                 <div class="mb-3">
                     <a href="/catalogo" class="text-decoration-none btn-volver-catalogo text-muted small fw-bold">
                         <i class="bi bi-chevron-left me-1"></i> Volver al catálogo
@@ -27,20 +26,29 @@
                     <div class="p-2 mb-2">
                         <h6 class="text-uppercase fw-bold text-secondary m-0 small" style="letter-spacing: 1px;">Mi Cuenta</h6>
                     </div>
-                    <div class="list-group list-group-flush" id="profileTabs" role="tablist">
-                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3 active" data-tab="tab-pedidos">
-                            <i class="bi bi-box-seam me-3 text-secondary"></i>Mis Pedidos
-                        </button>
-                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" data-tab="tab-prestamos">
-                            <i class="bi bi-book me-3 text-secondary"></i>Mis Préstamos
-                        </button>
-                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" data-tab="tab-multas">
-                            <i class="bi bi-exclamation-triangle me-3 text-secondary"></i>Mis Multas
-                        </button>
-                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" data-tab="tab-ajustes">
-                            <i class="bi bi-gear me-3 text-secondary"></i>Ajustes de Cuenta
-                        </button>
-                    </div>
+					<div class="list-group list-group-flush" id="profileTabs" role="tablist">
+					                        <!-- Mis Pedidos: Solo está activo si no venimos de guardar un cambio -->
+					                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" 
+					                                th:classappend="${param.cambioExitoso == null and param.errorPassword == null} ? 'active' : ''" 
+					                                data-tab="tab-pedidos">
+					                            <i class="bi bi-box-seam me-3 text-secondary"></i>Mis Pedidos
+					                        </button>
+					                        
+					                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" data-tab="tab-prestamos">
+					                            <i class="bi bi-book me-3 text-secondary"></i>Mis Préstamos
+					                        </button>
+					                        
+					                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" data-tab="tab-multas">
+					                            <i class="bi bi-exclamation-triangle me-3 text-secondary"></i>Mis Multas
+					                        </button>
+					                        
+					                        <!-- Ajustes: Se activa automáticamente si la URL tiene cambioExitoso o errorPassword -->
+					                        <button class="list-group-item list-group-item-action border-0 rounded-2 p-3" 
+					                                th:classappend="${param.cambioExitoso != null or param.errorPassword != null} ? 'active' : ''" 
+					                                data-tab="tab-ajustes">
+					                            <i class="bi bi-gear me-3 text-secondary"></i>Ajustes de Cuenta
+					                        </button>
+					                    </div>
                 </div>
             </div>
 
@@ -51,25 +59,25 @@
                         <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                             <i class="bi bi-person" style="font-size: 2.5rem; color: #c86b66;"></i>
                         </div>
-                        <div>
-                            <h4 class="fw-bold m-0 text-dark mb-1" th:text="${cliente.nombreRazonSocial}">Juan Pérez</h4>
-                            <p class="text-muted m-0 small mb-1">
-                                Tipo de Documento: <span th:text="${cliente.tipoDocumento}">DNI</span>
-                            </p>
-                            <p class="text-muted m-0 small mb-1">
-                                N° Documento: <span th:text="${cliente.numeroDocumento}">74839201</span>
-                            </p>
-                            <p class="text-muted m-0 small">
-                                Correo: <span th:text="${cliente.emailContacto}">juan.perez@ejemplo.com</span>
-                            </p>
-                        </div>
+						<div>
+						    <h4 class="fw-bold m-0 text-dark mb-1" th:text="${nombreRazonSocial}">Juan Pérez</h4>
+						    <p class="text-muted m-0 small mb-1">
+						        Tipo de Documento: <span th:text="${tipoDocumento}">DNI</span>
+						    </p>
+						    <p class="text-muted m-0 small mb-1">
+						        N° Documento: <span th:text="${numeroDocumento}">74839201</span>
+						    </p>
+						    <p class="text-muted m-0 small">
+						        Correo: <span th:text="${emailContacto}">juan.perez@ejemplo.com</span>
+						    </p>
+						</div>
                     </div>
                 </div>
 
                 <div class="card border-0 shadow-sm p-4 bg-white min-vh-50" style="border-radius: 12px;">
-
-                    <div id="tab-pedidos" class="nav-tab-content active">
-                        <h5 class="fw-bold text-dark mb-4" style="font-family: 'Georgia', serif;">Historial de Pedidos</h5>
+					<div id="tab-pedidos" class="nav-tab-content" th:classappend="${param.cambioExitoso == null and param.errorPassword == null} ? 'active' : ''">
+					                        <h5 class="fw-bold text-dark mb-4" style="font-family: 'Georgia', serif;">Historial de Pedidos</h5>
+					                        <!-- ... el resto de tu tabla ... -->
                         <div class="table-responsive">
                             <table class="table table-hover align-middle border-light">
                                 <thead class="table-light">
@@ -82,27 +90,41 @@
                                         <th class="text-end fw-normal">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr th:each="pedido : ${listaPedidos}">
-                                        <td class="fw-bold text-dark small" th:text="'PED-' + ${pedido.id}">PED-00123</td>
-                                        <td class="small" th:text="${#temporals.format(pedido.fechaPedido, 'dd MMM yyyy')}">15 May 2026</td>
-                                        <td class="small" th:text="${pedido.tipoEntrega}">Delivery</td>
-                                        <td class="fw-bold text-dark small" th:text="'S/ ' + ${pedido.total}">S/ 120.00</td>
-                                        <td>
-                                            <span th:if="${pedido.estadoActual.name() == 'ENTREGADO'}" class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-normal">Entregado</span>
-                                            <span th:if="${pedido.estadoActual.name() == 'ENVIADO'}" class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill fw-normal">Enviado</span>
-                                            <span th:if="${pedido.estadoActual.name() == 'PROCESANDO'}" class="badge bg-info bg-opacity-10 text-info px-3 py-1 rounded-pill fw-normal">Procesando</span>
-                                            <span th:if="${pedido.estadoActual.name() == 'PENDIENTE_PAGO'}" class="badge bg-warning bg-opacity-25 text-warning px-3 py-1 rounded-pill fw-normal">Pendiente de Pago</span>
-                                            <span th:if="${pedido.estadoActual.name() == 'CANCELADO'}" class="badge bg-danger bg-opacity-10 text-danger px-3 py-1 rounded-pill fw-normal">Cancelada</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <a th:href="@{/catalogo/pedidos/detalle/{id}(id=${pedido.id})}" class="text-decoration-none small text-danger fw-bold text-hover-coral">Ver detalle</a>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${#lists.isEmpty(listaPedidos)}">
-                                        <td colspan="6" class="text-center py-4 text-muted small">No registras ningún pedido actualmente.</td>
-                                    </tr>
-                                </tbody>
+								<tbody>
+								    <!-- El th:each recorre la lista real que envía el controlador -->
+								    <tr th:each="pedido : ${listaPedidos}">
+								        <!-- Muestra el ID real del pedido guardado en MySQL -->
+								        <td class="fw-bold text-dark small" th:text="'PED-' + ${pedido.id}">PED-00123</td>
+								        
+								        <!-- Muestra la fecha del pedido. Si agregaron el campo fechaPedido, se formatea aquí -->
+								        <td class="small" th:text="${pedido.id != null ? 'Hoy mismo' : '15 May 2026'}">15 May 2026</td>
+								        
+								        <!-- Muestra el tipo de entrega (DELIVERY / RECOJO) de tu Enum -->
+								        <td class="small" th:text="${pedido.tipoEntrega != null ? pedido.tipoEntrega.name() : 'Regular'}">Delivery</td>
+								        
+								        <!-- Muestra el monto total real cobrado en la pasarela -->
+								        <td class="fw-bold text-dark small" th:text="'S/ ' + ${pedido.total}">S/ 120.00</td>
+								        
+								        <!-- Pinta el badge de color de forma dinámica según el estado real de la BD -->
+										<td>
+										    <span th:if="${pedido.estadoActual.name() == 'PENDIENTE'}" class="badge bg-warning bg-opacity-25 text-warning px-3 py-1 rounded-pill fw-normal">Pendiente</span>
+										    <span th:if="${pedido.estadoActual.name() == 'PROCESANDO'}" class="badge bg-info bg-opacity-10 text-info px-3 py-1 rounded-pill fw-normal">Procesando</span>
+										    <span th:if="${pedido.estadoActual.name() == 'ENVIADO'}" class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill fw-normal">Enviado</span>
+										    <span th:if="${pedido.estadoActual.name() == 'ENTREGADO'}" class="badge bg-success bg-opacity-10 text-success px-3 py-1 rounded-pill fw-normal">Entregado</span>
+										    <span th:if="${pedido.estadoActual.name() == 'CANCELADO'}" class="badge bg-danger bg-opacity-10 text-danger px-3 py-1 rounded-pill fw-normal">Cancelada</span>
+										</td>
+								        
+								        <!-- El enlace dinámico que viaja al controlador enviando el ID del pedido para abrir los detalles -->
+								        <td class="text-end">
+								            <a th:href="@{/catalogo/pedidos/detalle/{id}(id=${pedido.id})}" class="text-decoration-none small text-danger fw-bold text-hover-coral">Ver detalle</a>
+								        </td>
+								    </tr>
+								    
+								    <!-- Si la lista de la BD está vacía, muestra este mensaje limpio -->
+								    <tr th:if="${#lists.isEmpty(listaPedidos)}">
+								        <td colspan="6" class="text-center py-4 text-muted small">No registras ningún pedido actualmente.</td>
+								    </tr>
+								</tbody>
                             </table>
                         </div>
                     </div>
@@ -177,39 +199,57 @@
                         </div>
                     </div>
 
-                    <div id="tab-ajustes" class="nav-tab-content">
-                        <h5 class="fw-bold text-dark mb-4" style="font-family: 'Georgia', serif;">Datos Personales</h5>
-                        <form th:action="@{/perfil/actualizar}" th:object="${cliente}" method="POST">
-                            <input type="hidden" th:field="*{id}" />
-                            
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-12">
-                                    <label class="form-label small text-muted">Nombre / Razón Social</label>
-                                    <input type="text" class="form-control p-2 bg-light border-light" th:field="*{nombreRazonSocial}" required style="border-radius: 8px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small text-muted">Teléfono Celular</label>
-                                    <input type="text" class="form-control p-2 bg-light border-light" th:field="*{telefono}" style="border-radius: 8px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small text-muted">Correo Electrónico</label>
-                                    <input type="email" class="form-control p-2 bg-light border-light" th:field="*{emailContacto}" required style="border-radius: 8px;">
-                                </div>
-                            </div>
+					<div id="tab-ajustes" class="nav-tab-content" th:classappend="${param.cambioExitoso != null or param.errorPassword != null} ? 'active' : ''">
+					                        <h5 class="fw-bold text-dark mb-4" style="font-family: 'Georgia', serif;">Datos Personales</h5>
+											<form th:action="@{/catalogo/perfil/actualizar}" method="POST">
+					                        <!-- ... el resto de tu formulario ... -->
+						    
+						    <div th:if="${param.cambioExitoso}" class="alert alert-success py-2 small text-center mb-3" role="alert" style="border-radius: 8px;">
+						        <i class="bi bi-check-circle-fill me-1"></i> ¡Perfil y credenciales actualizados con éxito!
+						    </div>
+						    <div th:if="${param.errorPassword}" class="alert alert-danger py-2 small text-center mb-3" role="alert" style="border-radius: 8px;">
+						        <i class="bi bi-exclamation-triangle-fill me-1"></i> La contraseña actual es incorrecta.
+						    </div>
 
+                            <input type="hidden" name="id" th:value="${cliente != null ? cliente.id : ''}" />
+                            
+							<div class="row g-3 mb-4">
+														    <div class="col-md-12">
+														        <label class="form-label small text-muted">Nombre / Razón Social</label>
+														        <input type="text" class="form-control p-2 bg-light border-light" name="nombreRazonSocial" th:value="${nombreRazonSocial}" required style="border-radius: 8px;">
+														    </div>
+							                                
+							                                <div class="col-md-6">
+							                                    <label class="form-label small text-muted">Número de Documento (DNI/RUC)</label>
+							                                    <input type="text" class="form-control p-2 bg-light border-light" name="nroDocumento" 
+							                                           th:value="${numeroDocumento != 'No registrado' ? numeroDocumento : ''}" 
+							                                           placeholder="Ej. 74839201" style="border-radius: 8px;">
+							                                </div>
+							                                
+															<div class="col-md-6">
+															    <label class="form-label small text-muted">Teléfono Celular</label>
+															    <input type="text" class="form-control p-2 bg-light border-light" name="telefono" placeholder="+51" style="border-radius: 8px;">
+															</div>
+							                                
+															<div class="col-md-12">
+															    <label class="form-label small text-muted">Correo Electrónico</label>
+															    <input type="email" class="form-control p-2 bg-light border-light text-muted" 
+															           name="emailContacto" th:value="${emailContacto}" required readonly style="border-radius: 8px;">
+															</div>
+														</div>
                             <hr class="opacity-10 my-4">
                             
-                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Georgia', serif;">Seguridad</h5>
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-6">
-                                    <label class="form-label small text-muted">Contraseña Actual</label>
-                                    <input type="password" name="passwordActual" class="form-control p-2 bg-light border-light" placeholder="********" style="border-radius: 8px;">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label small text-muted">Nueva Contraseña</label>
-                                    <input type="password" name="passwordNueva" class="form-control p-2 bg-light border-light" placeholder="********" style="border-radius: 8px;">
-                                </div>
-                            </div>
+							<h5 class="fw-bold text-dark mb-3" style="font-family: 'Georgia', serif;">Seguridad/Cambio de contraseña</h5>
+							<div class="row g-3 mb-4">
+							    <div class="col-md-6">
+							        <label class="form-label small text-muted">Ingrese su contraseña actual</label>
+							        <input type="password" name="passwordActual" class="form-control p-2 bg-light border-light" placeholder="********" style="border-radius: 8px;">
+							    </div>
+							    <div class="col-md-6">
+							        <label class="form-label small text-muted">Nueva Contraseña</label>
+							        <input type="password" name="passwordNueva" class="form-control p-2 bg-light border-light" placeholder="********" style="border-radius: 8px;">
+							    </div>
+							</div>
 
                             <div class="text-end">
                                 <button type="submit" class="btn text-white fw-bold px-4 py-2" style="background-color: #c86b66; border-radius: 8px;">

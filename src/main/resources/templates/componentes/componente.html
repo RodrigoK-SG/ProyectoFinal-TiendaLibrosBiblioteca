@@ -19,9 +19,9 @@
             </div>
 
 			<div class="d-flex align-items-center gap-3">
-			    <a href="/catalogo/perfil" class="text-decoration-none text-dark small d-flex align-items-center gap-1">
-			        <i class="bi bi-person fs-5"></i> Mi perfil
-			    </a>
+				<a th:href="@{/catalogo/perfil}" class="text-decoration-none text-dark small d-flex align-items-center gap-1">
+				    <i class="bi bi-person fs-5"></i> Mi perfil
+				</a>
 			    
 			    <span class="text-muted opacity-50">|</span>
 
@@ -31,8 +31,8 @@
 
 			    <span class="text-muted opacity-50">|</span>
 
-			    <a href="/catalogo/checkout" class="position-relative text-decoration-none text-dark ms-1">
-			        <i class="bi bi-cart3 fs-4 text-secondary"></i>
+				<a th:href="@{/catalogo/pagos}" class="position-relative text-decoration-none text-dark ms-1">
+				    <i class="bi bi-cart3 fs-4 text-secondary"></i>
 			        <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" 
 			              style="width: 18px; height: 18px; font-size: 0.65rem; padding: 0;">
 			              1
@@ -90,24 +90,12 @@
 				<div class="col-md-3 mb-4">
 				    <h6 class="fw-bold text-dark small text-uppercase" style="letter-spacing: 1px; font-size: 0.8rem;">Atención al Cliente</h6>
 				    <ul class="list-unstyled d-flex flex-column gap-2 small mt-3">
-				        <!-- MODIFICADO: Enlace a Políticas de Envío -->
-				        <li><a href="/catalogo/politicas-envio" class="text-decoration-none text-muted">Políticas de Envío</a></li>
-				        
-				        <!-- Enlace a Reglamento General -->
-				        <li><a href="/catalogo/reglamento" class="text-decoration-none text-muted">Reglamento General</a></li>
-				        
-				        <!-- MODIFICADO: Enlace a Políticas de Devolución -->
-				        <li><a href="/catalogo/politicas-devolucion" class="text-decoration-none text-muted">Políticas de Devolución</a></li>
-				        
-				        <!-- MODIFICADO: Enlace a Términos y Condiciones -->
-				        <li><a href="/catalogo/terminos-condiciones" class="text-decoration-none text-muted">Términos y Condiciones</a></li>
-				        
-				        <!-- Enlace a Libro de Reclamaciones -->
-				        <li>
-				            <a href="/catalogo/libro-reclamaciones" class="text-decoration-none text-muted">
-				                <i class="bi bi-journal-text me-1"></i>Libro de Reclamaciones
-				            </a>
-				        </li>
+						<!-- Enlaces corregidos -->
+						<li><a th:href="@{/catalogo/envio}" class="text-decoration-none text-muted">Políticas de Envío</a></li>
+						<li><a th:href="@{/catalogo/reglamento}" class="text-decoration-none text-muted">Reglamento General</a></li>
+						<li><a th:href="@{/catalogo/devolucion}" class="text-decoration-none text-muted">Políticas de Devolución</a></li>
+						<li><a th:href="@{/catalogo/terminos}" class="text-decoration-none text-muted">Términos y Condiciones</a></li>
+						<li><a th:href="@{/catalogo/reclamaciones}" class="text-decoration-none text-muted">Libro de Reclamaciones</a></li>
 				    </ul>
 				</div>
 
