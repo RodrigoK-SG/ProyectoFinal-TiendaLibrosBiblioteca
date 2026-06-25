@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +27,8 @@ public class AuthController {
     public String registrarUsuarioWeb(
             @RequestParam("nombreRazonSocial") String nombre,
             @RequestParam("email") String email,
-            @RequestParam("password") String password) {
+            @RequestParam("password") String password,
+            @RequestParam("nroDocumento") String nroDocumento) { // 1. Agregamos el parámetro para capturar el DNI
         
         // 1. Verificamos que el email no exista
         if (usuarioRepository.findByEmail(email).isPresent()) {
@@ -34,21 +37,24 @@ public class AuthController {
 
         // 2. Creamos el usuario
         Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombreCompleto(nombre); // Tu BD pide NOMBRE_COMPLETO
+        nuevoUsuario.setNombreCompleto(nombre); 
         nuevoUsuario.setEmail(email);
-        nuevoUsuario.setPasswordHash(passwordEncoder.encode(password)); // ¡La contraseña se guarda encriptada!
+        nuevoUsuario.setPasswordHash(passwordEncoder.encode(password)); 
         nuevoUsuario.setActivo(true);
+        
+        // ¡ESTA ES LA LÍNEA CLAVE! 
+        // 2. Le asignamos el DNI al objeto antes de mandarlo a guardar
+        nuevoUsuario.setNroDocumento(nroDocumento); 
 
-     // 3. Asignamos el rol por defecto: CLIENTE_WEB
+        // 3. Asignamos el rol por defecto: CLIENTE_WEB
         Rol rolCliente = rolRepository.findByNombre("CLIENTE_WEB")
                 .orElseThrow(() -> new RuntimeException("El rol CLIENTE_WEB no existe en la BD"));
 
-        // Usamos List y ArrayList para que coincida con tu clase Usuario
         List<Rol> roles = new ArrayList<>();
         roles.add(rolCliente);
         nuevoUsuario.setRoles(roles);
 
-        // 4. Guardamos en la BD
+        // 4. Guardamos en la BD (ahora se guardará con todo y DNI)
         usuarioRepository.save(nuevoUsuario);
 
         // 5. Redirigimos al login para que ingrese con su nueva cuenta

@@ -26,7 +26,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 redirectUrl = "/admin";
                 break;
             } else if (roleName.equals("VENDEDOR")) {
-                redirectUrl = "/vendedor";
+                redirectUrl = "/vendedor/caja";
                 break;
             } else if (roleName.equals("BIBLIOTECARIO")) {
                 redirectUrl = "/bibliotecario";
