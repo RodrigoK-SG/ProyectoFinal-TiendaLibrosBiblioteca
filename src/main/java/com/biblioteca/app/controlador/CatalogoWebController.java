@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.biblioteca.app.modelo.Pedido;
 import com.biblioteca.app.servicio.CategoriaServicio;
 import com.biblioteca.app.servicio.LibroServicio;
-import com.biblioteca.app.servicio.PedidoServicio;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +18,6 @@ public class CatalogoWebController {
 
     private final LibroServicio libroServicio;
     private final CategoriaServicio categoriaServicio;
-    private final PedidoServicio pedidoServicio;
 
     @GetMapping
     public String verCatalogoPublico(Model model) {

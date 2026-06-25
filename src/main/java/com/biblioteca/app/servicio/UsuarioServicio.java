@@ -60,4 +60,13 @@ public class UsuarioServicio {
         usuario.setActivo(false);
         usuarioRepository.save(usuario);
     }
+    
+    public List<Usuario> listarPersonalAdmin() {
+        return usuarioRepository.findUsuariosNoClientes();
+    }
+    
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el email: " + email));
+    }
 }
