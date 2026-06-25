@@ -28,4 +28,7 @@ public class Sucursal {
     
     @Column(name = "TIENE_BIBLIOTECA") 
     private Boolean tieneBiblioteca = false;
+    
+    @Column(name = "ACTIVO")
+    private Boolean activo = true;
 }

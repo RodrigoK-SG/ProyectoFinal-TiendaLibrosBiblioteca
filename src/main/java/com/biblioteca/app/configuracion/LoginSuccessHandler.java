@@ -17,16 +17,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        
-        String redirectUrl = "/catalogo"; // Ruta por defecto (Cliente Web)
-        
-        // Obtenemos los roles del usuario que acaba de iniciar sesión
+        String redirectUrl = "/catalogo"; 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        
         for (GrantedAuthority grantedAuthority : authorities) {
             String roleName = grantedAuthority.getAuthority();
             
-            // Redirección basada en el rol de tu BD
             if (roleName.equals("ADMINISTRADOR")) {
                 redirectUrl = "/admin";
                 break;
@@ -40,11 +35,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 redirectUrl = "/almacen";
                 break;
             } else if (roleName.equals("CLIENTE_WEB")) {
-                redirectUrl = "/catalogo/perfil"; // O donde quieras llevar al cliente al entrar
+                redirectUrl = "/catalogo/perfil"; 
                 break;
             }
         }
-        
         response.sendRedirect(redirectUrl);
     }
 }
