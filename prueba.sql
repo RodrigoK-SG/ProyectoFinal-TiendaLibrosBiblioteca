@@ -2,9 +2,10 @@ USE TIENDA_BIBLIOTECA_DB;
 
 -- =========================================================
 -- 1. ACTUALIZACIÓN DE PORTADAS (Para los libros iniciales ID 1 y 2)
+-- Usando Open Library API con los ISBN correspondientes
 -- =========================================================
-UPDATE LIBRO SET IMAGEN_PORTADA = 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300&auto=format&fit=crop' WHERE ISBN = '9788466361897'; -- Dune
-UPDATE LIBRO SET IMAGEN_PORTADA = 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&auto=format&fit=crop' WHERE ISBN = '9788401344497'; -- Cosmos
+UPDATE LIBRO SET IMAGEN_PORTADA = 'https://covers.openlibrary.org/b/isbn/9788466361897-L.jpg' WHERE ISBN = '9788466361897'; -- Dune
+UPDATE LIBRO SET IMAGEN_PORTADA = 'https://covers.openlibrary.org/b/isbn/9788401344497-L.jpg' WHERE ISBN = '9788401344497'; -- Cosmos
 
 -- =========================================================
 -- 2. NUEVOS AUTORES (Evitando duplicar los existentes)
@@ -24,13 +25,13 @@ INSERT INTO CATEGORIA (NOMBRE) VALUES
 ('HISTORIA');
 
 -- =========================================================
--- 4. NUEVOS LIBROS CON PORTADAS DE INTERNET REALES
+-- 4. NUEVOS LIBROS CON PORTADAS DE INTERNET REALES (Open Library API)
 -- =========================================================
 INSERT INTO LIBRO (ISBN, TITULO, SLUG, IMAGEN_PORTADA, SINOPSIS, PAGINAS, FORMATO, PRECIO_VENTA_ACTUAL, PRECIO_ALQUILER_ACTUAL, EDITORIAL_ID, ACTIVO) VALUES
-('9788497593793', 'EL RESPLANDOR', 'el-resplandor-stephen-king', 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=300&auto=format&fit=crop', 'Terror en un hotel aislado...', 500, 'TAPA_BLANDA', 89.90, 12.00, 1, TRUE),
-('9788477027317', 'LORE CTHULHU', 'el-mito-de-cthulhu', 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=300&auto=format&fit=crop', 'Los horrores cósmicos ancestrales...', 350, 'TAPA_DURA', 110.00, 18.00, 1, TRUE),
-('9788498383393', 'CORALINE', 'coraline-neil-gaiman', 'https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?q=80&w=300&auto=format&fit=crop', 'Cuidado con lo que deseas detrás de la puerta...', 210, 'DE_BOLSILLO', 55.00, 7.50, 2, TRUE),
-('9786123164911', 'HISTORIA DEL PERU', 'historia-breve-del-peru', 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300&auto=format&fit=crop', 'Un compendio resumido de nuestra era republicana...', 310, 'TAPA_BLANDA', 45.00, 0.00, 2, TRUE);
+('9788497593793', 'EL RESPLANDOR', 'el-resplandor-stephen-king', 'https://covers.openlibrary.org/b/isbn/9788497593793-L.jpg', 'Terror en un hotel aislado...', 500, 'TAPA_BLANDA', 89.90, 12.00, 1, TRUE),
+('9788477027317', 'LORE CTHULHU', 'el-mito-de-cthulhu', 'https://covers.openlibrary.org/b/isbn/9788477027317-L.jpg', 'Los horrores cósmicos ancestrales...', 350, 'TAPA_DURA', 110.00, 18.00, 1, TRUE),
+('9788498383393', 'CORALINE', 'coraline-neil-gaiman', 'https://covers.openlibrary.org/b/isbn/9788498383393-L.jpg', 'Cuidado con lo que deseas detrás de la puerta...', 210, 'DE_BOLSILLO', 55.00, 7.50, 2, TRUE),
+('9786123164911', 'HISTORIA DEL PERU', 'historia-breve-del-peru', 'https://covers.openlibrary.org/b/isbn/9786123164911-L.jpg', 'Un compendio resumido de nuestra era republicana...', 310, 'TAPA_BLANDA', 45.00, 0.00, 2, TRUE);
 
 -- =========================================================
 -- 5. VINCULACIÓN DINÁMICA DE RELACIONES (Usando Subconsultas Seguras)
@@ -50,12 +51,11 @@ INSERT INTO LIBRO_CATEGORIA (LIBRO_ID, CATEGORIA_ID) VALUES
 ((SELECT ID FROM LIBRO WHERE ISBN = '9788498383393'), (SELECT ID FROM CATEGORIA WHERE NOMBRE = 'FANTASIA')),
 ((SELECT ID FROM LIBRO WHERE ISBN = '9786123164911'), (SELECT ID FROM CATEGORIA WHERE NOMBRE = 'HISTORIA'));
 
-
+-- =========================================================
+-- 6. MODIFICACIÓN DE ESTRUCTURAS DE TABLAS
+-- =========================================================
 ALTER TABLE USUARIO ADD COLUMN NRO_DOCUMENTO VARCHAR(15);
 ALTER TABLE PEDIDO MODIFY COLUMN CANAL_VENTA VARCHAR(20) NULL;
-
-
-
 
 -- 1. Quitamos temporalmente el modo seguro para aplicar los cambios de emergencia
 SET SQL_SAFE_UPDATES = 0;
