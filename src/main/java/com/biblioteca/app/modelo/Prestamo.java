@@ -39,4 +39,7 @@ public class Prestamo {
     
     @Enumerated(EnumType.STRING) 
     private EstadoPrestamo estado;
+
+    @Column(name = "FECHA_PRESTAMO", nullable = false, updatable = false)
+    private LocalDateTime fechaPrestamo = LocalDateTime.now(); // Este campo es el que falta
 }
