@@ -44,7 +44,7 @@ public class PedidoServicio {
         pedido.setId(null);
         
         // Regla de negocio: Todo pedido nace en estado "PENDIENTE"
-        pedido.setEstadoActual(EstadoPedido.PENDIENTE);
+        pedido.setEstadoActual(EstadoPedido.PENDIENTE_PAGO);
 
         // Amarramos los detalles al pedido padre para que JPA sepa a quién pertenecen
         if (pedido.getDetalles() != null) {
@@ -59,7 +59,7 @@ public class PedidoServicio {
         // AUDITORÍA: Registramos el primer hito en HISTORIAL_ESTADO_PEDIDO
         HistorialEstadoPedido historial = new HistorialEstadoPedido();
         historial.setPedido(pedidoGuardado);
-        historial.setEstado(EstadoPedido.PENDIENTE);
+        historial.setEstado(EstadoPedido.PENDIENTE_PAGO);
         historial.setComentario("Pedido creado en el sistema por el cliente.");
         historialRepository.save(historial);
 

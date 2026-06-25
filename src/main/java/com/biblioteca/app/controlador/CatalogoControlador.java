@@ -151,7 +151,7 @@ public class CatalogoControlador {
                 Pedido nuevoPedido = new Pedido();
                 
                 nuevoPedido.setCliente(cliente);
-                nuevoPedido.setEstadoActual(com.biblioteca.app.modelo.enums.EstadoPedido.PENDIENTE);
+                nuevoPedido.setEstadoActual(com.biblioteca.app.modelo.enums.EstadoPedido.PENDIENTE_PAGO);
                 
                 if ("DELIVERY".equalsIgnoreCase(tipoEntrega)) {
                     nuevoPedido.setTipoEntrega(com.biblioteca.app.modelo.enums.TipoEntrega.DELIVERY);
